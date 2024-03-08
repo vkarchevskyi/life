@@ -1,11 +1,11 @@
 <?php
 
 use App\Console\EscapeCodes;
-use App\Fields\Field;
+use App\Fields\ConwaysField;
 
 require_once __DIR__ . DIRECTORY_SEPARATOR . 'vendor' . DIRECTORY_SEPARATOR . 'autoload.php';
 
-$field = new Field(200, 50, true);
+$field = new ConwaysField(200, 50, true);
 
 try {
     $field->generateField();

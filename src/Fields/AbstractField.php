@@ -39,6 +39,8 @@ abstract class AbstractField
 
     abstract public function nextStep(): void;
 
+    abstract public function calculateStep(int $step): void;
+
     abstract public function generateField(): void;
 
     abstract protected function calculateNeighbors(int $x, int $y): int;

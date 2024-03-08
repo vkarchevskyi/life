@@ -9,14 +9,17 @@ use App\Cells\ConwaysCell;
 use App\Console\EscapeCodes;
 use Random\RandomException;
 
-class Field extends AbstractField
+class ConwaysField extends AbstractField
 {
+    // TODO: use connect borders variable
+    // TODO: create functions to end game
+
     public function __construct(int $xSize, int $ySize, bool $connectBorders)
     {
         parent::__construct($xSize, $ySize, $connectBorders);
     }
 
-    final public function printField(): void
+    public function printField(): void
     {
         echo EscapeCodes::RED->value;
 
@@ -25,13 +28,13 @@ class Field extends AbstractField
                 echo $this->gameField[$y][$x];
             }
 
-            echo "\n";
+            echo PHP_EOL;
         }
 
         echo EscapeCodes::RESET->value;
     }
 
-    #[\Override] final public function nextStep(): void
+    #[\Override] public function nextStep(): void
     {
         $newArr = [];
 
@@ -58,7 +61,7 @@ class Field extends AbstractField
     /**
      * @throws RandomException
      */
-    #[\Override] final public function generateField(): void
+    #[\Override] public function generateField(): void
     {
         $generatedGameField = [];
 
@@ -66,16 +69,14 @@ class Field extends AbstractField
             $generatedGameField[$y] = [];
 
             for ($x = 0; $x < $this->xSize; $x++) {
-                $generatedGameField[$y][$x] = random_int(0, 1)
-                    ? new ConwaysCell(true)
-                    : new ConwaysCell(false);
+                $generatedGameField[$y][$x] = new ConwaysCell((bool)random_int(0, 1));
             }
         }
 
         $this->gameField = $generatedGameField;
     }
 
-    #[\Override] final protected function calculateNeighbors(int $x, int $y): int
+    #[\Override] protected function calculateNeighbors(int $x, int $y): int
     {
         $top = $this->getTopCoordinate($y);
         $bottom = $this->getBottomCoordinate($y);
@@ -101,23 +102,37 @@ class Field extends AbstractField
         }, 0);
     }
 
-    #[\Override] final protected function getTopCoordinate(int $y): int
+    #[\Override] protected function getTopCoordinate(int $y): int
     {
         return $y - 1 >= self::START_Y ? $y - 1 : $this->ySize - 1;
     }
 
-    #[\Override] final protected function getBottomCoordinate(int $y): int
+    #[\Override] protected function getBottomCoordinate(int $y): int
     {
         return $y + 1 < $this->ySize ? $y + 1 : self::START_Y;
     }
 
-    #[\Override] final protected function getLeftCoordinate(int $x): int
+    #[\Override] protected function getLeftCoordinate(int $x): int
     {
         return $x - 1 >= self::START_X ? $x - 1 : $this->xSize - 1;
     }
 
-    #[\Override] final protected function getRightCoordinate(int $x): int
+    #[\Override] protected function getRightCoordinate(int $x): int
     {
         return $x + 1 < $this->xSize ? $x + 1 : self::START_X;
+    }
+
+    /**
+     * @throws \LogicException
+     */
+    #[\Override] public function calculateStep(int $step): void
+    {
+        if ($step <= 0) {
+            throw new \LogicException('Step can be only positive number');
+        }
+
+        for ($i = 0; $i < $step; $i++) {
+            $this->nextStep();
+        }
     }
 }
