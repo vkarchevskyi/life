@@ -5,7 +5,7 @@ use App\Fields\ConwaysField;
 
 require_once __DIR__ . DIRECTORY_SEPARATOR . 'vendor' . DIRECTORY_SEPARATOR . 'autoload.php';
 
-$field = new ConwaysField(200, 50, true);
+$field = new ConwaysField(235, 50, true);
 
 try {
     $field->generateField();

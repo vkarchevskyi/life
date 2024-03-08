@@ -11,7 +11,6 @@ use Random\RandomException;
 
 class ConwaysField extends AbstractField
 {
-    // TODO: use connect borders variable
     // TODO: create functions to end game
 
     public function __construct(int $xSize, int $ySize, bool $connectBorders)
@@ -76,24 +75,26 @@ class ConwaysField extends AbstractField
         $this->gameField = $generatedGameField;
     }
 
+    /**
+     * @throws \LogicException
+     */
+    #[\Override] public function calculateStep(int $step): void
+    {
+        if ($step <= 0) {
+            throw new \LogicException('Step can be only positive number');
+        }
+
+        for ($i = 0; $i < $step; $i++) {
+            $this->nextStep();
+        }
+    }
+
     #[\Override] protected function calculateNeighbors(int $x, int $y): int
     {
-        $top = $this->getTopCoordinate($y);
-        $bottom = $this->getBottomCoordinate($y);
-
-        $left = $this->getLeftCoordinate($x);
-        $right = $this->getRightCoordinate($x);
-
-        $neighbors = [
-            $this->gameField[$top][$left],
-            $this->gameField[$top][$x],
-            $this->gameField[$top][$right],
-            $this->gameField[$y][$left],
-            $this->gameField[$y][$right],
-            $this->gameField[$bottom][$left],
-            $this->gameField[$bottom][$x],
-            $this->gameField[$bottom][$right]
-        ];
+        /* @var array<AbstractCell> $neighbors */
+        $neighbors = $this->connectBorders
+            ? $this->getNeighborsOnConnectedBoard($x, $y)
+            : $this->getNeighborsOnNonConnectedBoard($x, $y);
 
         /* @var AbstractCell $cell */
         return array_reduce($neighbors, function ($counter, $cell) {
@@ -122,17 +123,72 @@ class ConwaysField extends AbstractField
         return $x + 1 < $this->xSize ? $x + 1 : self::START_X;
     }
 
-    /**
-     * @throws \LogicException
-     */
-    #[\Override] public function calculateStep(int $step): void
+    private function getNeighborsOnConnectedBoard(int $x, int $y): array
     {
-        if ($step <= 0) {
-            throw new \LogicException('Step can be only positive number');
+        $top = $this->getTopCoordinate($y);
+        $bottom = $this->getBottomCoordinate($y);
+
+        $left = $this->getLeftCoordinate($x);
+        $right = $this->getRightCoordinate($x);
+
+        return [
+            $this->gameField[$top][$left],
+            $this->gameField[$top][$x],
+            $this->gameField[$top][$right],
+            $this->gameField[$y][$left],
+            $this->gameField[$y][$right],
+            $this->gameField[$bottom][$left],
+            $this->gameField[$bottom][$x],
+            $this->gameField[$bottom][$right]
+        ];
+    }
+
+    private function getNeighborsOnNonConnectedBoard(int $x, int $y): array
+    {
+        $neighbors = [];
+
+        $top = $this->getTopCoordinate($y);
+        $bottom = $this->getBottomCoordinate($y);
+        $left = $this->getLeftCoordinate($x);
+        $right = $this->getRightCoordinate($x);
+
+        $useTop = $y - 1 >= self::START_Y;
+        $useBottom = $y + 1 < $this->ySize;
+        $useLeft = $x - 1 >= self::START_X;
+        $useRight = $x + 1 < $this->xSize;
+
+        if ($useTop) {
+            $neighbors[] = $this->gameField[$top][$x];
+
+            if ($useLeft) {
+                $neighbors[] = $this->gameField[$top][$left];
+            }
+
+            if ($useRight) {
+                $neighbors[] = $this->gameField[$top][$right];
+            }
         }
 
-        for ($i = 0; $i < $step; $i++) {
-            $this->nextStep();
+        if ($useBottom) {
+            $neighbors[] = $this->gameField[$bottom][$x];
+
+            if ($useLeft) {
+                $neighbors[] = $this->gameField[$bottom][$left];
+            }
+
+            if ($useRight) {
+                $neighbors[] = $this->gameField[$bottom][$right];
+            }
         }
+
+        if ($useLeft) {
+            $neighbors[] = $this->gameField[$y][$left];
+        }
+
+        if ($useRight) {
+            $neighbors[] = $this->gameField[$y][$right];
+        }
+
+        return $neighbors;
     }
 }
