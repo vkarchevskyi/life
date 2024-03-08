@@ -15,7 +15,12 @@ try {
 
 
 for ($i = 0; $i < 1000; $i++) {
-    echo EscapeCodes::CLEAR_TERMINAL->value;
+    if (PHP_OS_FAMILY === 'Windows') {
+        echo EscapeCodes::CLEAR_TERMINAL->value;
+    } else {
+        system("clear");
+    }
+
     $field->printField();
     usleep(50000);
     $field->nextStep();

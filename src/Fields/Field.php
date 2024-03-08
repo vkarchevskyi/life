@@ -4,18 +4,31 @@ declare(strict_types=1);
 
 namespace App\Fields;
 
+use App\Cells\AbstractCell;
+use App\Cells\ConwaysCell;
 use App\Console\EscapeCodes;
 use Random\RandomException;
 
 class Field extends AbstractField
 {
-    protected const string ALIVE_CELL = "*";
-
-    protected const string DEAD_CELL = " ";
-
     public function __construct(int $xSize, int $ySize, bool $connectBorders)
     {
         parent::__construct($xSize, $ySize, $connectBorders);
+    }
+
+    final public function printField(): void
+    {
+        echo EscapeCodes::RED->value;
+
+        for ($y = 0; $y < $this->ySize; $y++) {
+            for ($x = 0; $x < $this->xSize; $x++) {
+                echo $this->gameField[$y][$x];
+            }
+
+            echo "\n";
+        }
+
+        echo EscapeCodes::RESET->value;
     }
 
     #[\Override] final public function nextStep(): void
@@ -26,16 +39,15 @@ class Field extends AbstractField
             for ($x = 0; $x < $this->xSize; $x++) {
                 $neighborsCount = $this->calculateNeighbors($x, $y);
 
-                if ($this->gameField[$y][$x] === self::DEAD_CELL && $neighborsCount === 3) {
-                    $newArr[$y][$x] = self::ALIVE_CELL;
-                } elseif (
-                    $this->gameField[$y][$x] === self::ALIVE_CELL
-                    && $neighborsCount >= 2
-                    && $neighborsCount <= 3
-                ) {
-                    $newArr[$y][$x] = self::ALIVE_CELL;
+                /* @var AbstractCell $cell */
+                $cell = $this->gameField[$y][$x];
+
+                if (!$cell->isAlive() && $neighborsCount === 3) {
+                    $newArr[$y][$x] = new ConwaysCell(true);
+                } elseif ($cell->isAlive() && $neighborsCount >= 2 && $neighborsCount <= 3) {
+                    $newArr[$y][$x] = new ConwaysCell(true);
                 } else {
-                    $newArr[$y][$x] = self::DEAD_CELL;
+                    $newArr[$y][$x] = new ConwaysCell(false);
                 }
             }
         }
@@ -50,14 +62,13 @@ class Field extends AbstractField
     {
         $generatedGameField = [];
 
-        $allVariants = [self::DEAD_CELL, self::ALIVE_CELL];
-        $variantsQuantity = count($allVariants);
-
         for ($y = 0; $y < $this->ySize; $y++) {
             $generatedGameField[$y] = [];
 
             for ($x = 0; $x < $this->xSize; $x++) {
-                $generatedGameField[$y][$x] = $allVariants[random_int(0, $variantsQuantity - 1)];
+                $generatedGameField[$y][$x] = random_int(0, 1)
+                    ? new ConwaysCell(true)
+                    : new ConwaysCell(false);
             }
         }
 
@@ -83,26 +94,11 @@ class Field extends AbstractField
             $this->gameField[$bottom][$right]
         ];
 
-        return array_reduce($neighbors, function ($carry, $item) {
-            $carry += ($item === self::ALIVE_CELL) ? 1 : 0;
-            return $carry;
+        /* @var AbstractCell $cell */
+        return array_reduce($neighbors, function ($counter, $cell) {
+            $counter += (int)$cell->isAlive();
+            return $counter;
         }, 0);
-    }
-
-    final public function printField(): void
-    {
-        echo EscapeCodes::RED->value;
-
-        for ($y = 0; $y < $this->ySize; $y++) {
-
-            for ($x = 0; $x < $this->xSize; $x++) {
-                echo $this->gameField[$y][$x];
-            }
-
-            echo "\n";
-        }
-
-        echo EscapeCodes::RESET->value;
     }
 
     #[\Override] final protected function getTopCoordinate(int $y): int

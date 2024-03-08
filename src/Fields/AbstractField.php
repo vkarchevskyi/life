@@ -16,6 +16,7 @@ abstract class AbstractField
 
     protected readonly bool $connectBorders;
 
+    /* @var array<array> $gameField*/
     protected array $gameField;
 
 
