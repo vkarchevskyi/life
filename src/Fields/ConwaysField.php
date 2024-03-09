@@ -11,8 +11,6 @@ use Random\RandomException;
 
 class ConwaysField extends AbstractField
 {
-    // TODO: create functions to end game
-
     public function __construct(int $xSize, int $ySize, bool $connectBorders)
     {
         parent::__construct($xSize, $ySize, $connectBorders);
