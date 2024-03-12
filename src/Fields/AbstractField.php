@@ -6,6 +6,10 @@ namespace App\Fields;
 
 abstract class AbstractField
 {
+    protected const int DEFAULT_X_SIZE = 10;
+
+    protected const int DEFAULT_Y_SIZE = 10;
+
     protected const int START_X = 0;
 
     protected const int START_Y = 0;
@@ -20,18 +24,16 @@ abstract class AbstractField
     protected array $gameField;
 
 
-    public function __construct(int $xSize, int $ySize, bool $connectBorders)
-    {
-        if ($xSize >= 0) {
-            $this->xSize = $xSize;
-        } else {
-            exit(1);
+    public function __construct(
+        int $xSize = self::DEFAULT_X_SIZE,
+        int $ySize = self::DEFAULT_Y_SIZE,
+        bool $connectBorders = true
+    ) {
+        if ($xSize <= 0) {
+            throw new \LogicException('xSize variable cannot be equal or less than zero.');
         }
-
-        if ($ySize >= 0) {
-            $this->ySize = $ySize;
-        } else {
-            exit(1);
+        if ($ySize <= 0) {
+            throw new \LogicException('ySize variable cannot be equal or less than zero.');
         }
 
         $this->connectBorders = $connectBorders;
