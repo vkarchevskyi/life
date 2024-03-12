@@ -15,4 +15,5 @@ Minimal version of php is `>=8.3` for this project.
 - [ ] Add responsive UI
 - [ ] Extend game by creating other fields and cells
 - [ ] Improve validation
+- [ ] Add custom rules for Conway's game (random life, for example)
 - [ ] Write tests

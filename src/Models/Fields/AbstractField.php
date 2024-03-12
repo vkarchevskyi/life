@@ -2,7 +2,9 @@
 
 declare(strict_types=1);
 
-namespace App\Fields;
+namespace App\Models\Fields;
+
+use App\Models\Cells\AbstractCell;
 
 abstract class AbstractField
 {
@@ -36,6 +38,9 @@ abstract class AbstractField
             throw new \LogicException('ySize variable cannot be equal or less than zero.');
         }
 
+        $this->xSize = $xSize;
+        $this->ySize = $ySize;
+
         $this->connectBorders = $connectBorders;
     }
 
@@ -54,4 +59,23 @@ abstract class AbstractField
     abstract protected function getLeftCoordinate(int $x): int;
 
     abstract protected function getRightCoordinate(int $x): int;
+
+    public function getXSize(): int
+    {
+        return $this->xSize;
+    }
+
+    public function getYSize(): int
+    {
+        return $this->ySize;
+    }
+
+    public function getCell(int $x, int $y): AbstractCell
+    {
+        if (isset($this->gameField[$y][$x])) {
+            return $this->gameField[$y][$x];
+        }
+
+        throw new \LogicException('This coordinates don\'t matches with game field');
+    }
 }

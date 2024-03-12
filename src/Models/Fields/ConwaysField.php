@@ -2,11 +2,10 @@
 
 declare(strict_types=1);
 
-namespace App\Fields;
+namespace App\Models\Fields;
 
-use App\Cells\AbstractCell;
-use App\Cells\ConwaysCell;
-use App\Console\EscapeCodes;
+use App\Models\Cells\AbstractCell;
+use App\Models\Cells\ConwaysCell;
 use Random\RandomException;
 
 class ConwaysField extends AbstractField
@@ -14,21 +13,6 @@ class ConwaysField extends AbstractField
     public function __construct(int $xSize, int $ySize, bool $connectBorders)
     {
         parent::__construct($xSize, $ySize, $connectBorders);
-    }
-
-    public function printField(): void
-    {
-        echo EscapeCodes::RED->value;
-
-        for ($y = 0; $y < $this->ySize; $y++) {
-            for ($x = 0; $x < $this->xSize; $x++) {
-                echo $this->gameField[$y][$x];
-            }
-
-            echo PHP_EOL;
-        }
-
-        echo EscapeCodes::RESET->value;
     }
 
     #[\Override] public function nextStep(): void
@@ -43,9 +27,9 @@ class ConwaysField extends AbstractField
                 $cell = $this->gameField[$y][$x];
 
                 if (!$cell->isAlive() && $neighborsCount === 3) {
-                    $newArr[$y][$x] = new ConwaysCell(true);
+                    $newArr[$y][$x] = new ConwaysCell(true, 0);
                 } elseif ($cell->isAlive() && $neighborsCount >= 2 && $neighborsCount <= 3) {
-                    $newArr[$y][$x] = new ConwaysCell(true);
+                    $newArr[$y][$x] = new ConwaysCell(true, $cell->getDaysOfLive() + 1);
                 } else {
                     $newArr[$y][$x] = new ConwaysCell(false);
                 }
