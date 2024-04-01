@@ -6,6 +6,8 @@ namespace App\Views\Console;
 
 use App\Models\Commands\ConsoleCommand;
 use App\Models\Fields\AbstractField;
+use App\Models\Fields\ConwaysField;
+use App\Models\Fields\ForestField;
 use App\Views\AbstractView;
 
 class ConsoleView extends AbstractView
@@ -72,12 +74,10 @@ class ConsoleView extends AbstractView
             echo "4. Start game simulation.\n";
             echo "0. Exit.\n";
 
-            $command = readline('Enter the command: ');
+            $command = intval(readline('Enter the command: '));
 
-            $commandValue = intval($command);
-
-            if (ConsoleCommand::tryFrom($commandValue)) {
-                return ConsoleCommand::from($commandValue)->value;
+            if (ConsoleCommand::tryFrom($command)) {
+                return ConsoleCommand::from($command)->value;
             }
 
             echo "Incorrect data. Please try again.\n";
@@ -91,5 +91,26 @@ class ConsoleView extends AbstractView
         } while (!is_numeric($quantity) || $quantity < 0);
 
         return intval($quantity);
+    }
+
+    #[\Override] public function getFieldType(): string
+    {
+        do {
+            echo "1. Conway's life\n";
+            echo "2. Forest\n";
+
+            $fieldType = intval(readline('Select the type of game: '));
+
+            switch ($fieldType) {
+                case 1:
+                    return ConwaysField::class;
+                case 2:
+                    return ForestField::class;
+                default:
+                    break;
+            }
+
+            echo "Incorrect data. Please try again.\n";
+        } while (true);
     }
 }

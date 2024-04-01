@@ -15,4 +15,6 @@ abstract class AbstractView
     abstract public function getCommand(): int;
 
     abstract public function getStepQuantity(): int;
+
+    abstract public function getFieldType(): string;
 }

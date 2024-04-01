@@ -4,10 +4,19 @@ declare(strict_types=1);
 
 namespace App\Models\Cells;
 
-use App\Views\Console\EscapeCodes;
+use App\Models\CellsTypes\ForestCellTypes;
 
-class ConwaysCell extends AbstractCell
+class ForestCell extends AbstractCell
 {
+    public readonly ForestCellTypes $type;
+
+    public function __construct(ForestCellTypes $type, bool $alive, ?int $daysOfLive = 0)
+    {
+        parent::__construct($alive, $daysOfLive);
+
+        $this->type = $type;
+    }
+
     #[\Override] public function isAlive(): bool
     {
         return $this->alive;
@@ -30,16 +39,6 @@ class ConwaysCell extends AbstractCell
 
     #[\Override] public function getAliveCell(): string
     {
-        $startColor = EscapeCodes::RED;
-
-        if ($this->getDaysOfLive() > 0) {
-            $startColor = EscapeCodes::GREEN;
-        }
-
-        if ($this->getDaysOfLive() >= 3) {
-            $startColor = EscapeCodes::MAGENTA;
-        }
-
-        return $startColor->value . "*" . EscapeCodes::RESET->value;
+        return $this->type->value;
     }
 }

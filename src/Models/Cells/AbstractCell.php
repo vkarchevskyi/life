@@ -8,9 +8,9 @@ abstract class AbstractCell
 {
     protected bool $alive;
 
-    protected int $daysOfLive;
+    protected ?int $daysOfLive;
 
-    public function __construct(bool $alive, int $daysOfLive = 0)
+    public function __construct(bool $alive, ?int $daysOfLive = 0)
     {
         $this->alive = $alive;
 
@@ -20,8 +20,6 @@ abstract class AbstractCell
 
         $this->daysOfLive = $daysOfLive;
     }
-
-    abstract public function __toString(): string;
 
     abstract public function isAlive(): bool;
 
@@ -36,5 +34,12 @@ abstract class AbstractCell
     public function getDaysOfLive(): int
     {
         return $this->daysOfLive;
+    }
+
+    public function __toString(): string
+    {
+        return $this->alive
+            ? $this->getAliveCell()
+            : $this->getDeadCell();
     }
 }

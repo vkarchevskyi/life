@@ -6,20 +6,18 @@ namespace App\Controllers;
 
 use App\Models\Commands\ConsoleCommand;
 use App\Models\Fields\AbstractField;
-use App\Models\Fields\ConwaysField;
 use App\Views\Console\ConsoleView;
 
 class ConsoleController extends AbstractController
 {
     protected ConsoleView $view;
 
-    protected ?AbstractField $field;
+    protected AbstractField $field;
 
 
     public function __construct()
     {
         $this->view = new ConsoleView();
-        $this->field = null;
     }
 
     #[\Override] public function run(): void
@@ -57,18 +55,15 @@ class ConsoleController extends AbstractController
 
     #[\Override] protected function createField(): void
     {
-        $this->field = new ConwaysField(
+        $fieldType = $this->view->getFieldType();
+
+        $this->field = new $fieldType(
             $this->getX(),
             $this->gety(),
             $this->getConnectedBorders()
         );
 
-        try {
-            $this->field->generateField();
-        } catch (\Random\RandomException $e) {
-            echo $e->getMessage();
-            exit(1);
-        }
+        $this->field->generateField();
     }
 
     #[\Override] protected function play(int $stepQuantity): void
