@@ -32,11 +32,11 @@ class ConwaysCell extends AbstractCell
     {
         $startColor = EscapeCodes::RED;
 
-        if ($this->getDaysOfLive() > 0) {
+        if ($this->getLivingDays() > 0) {
             $startColor = EscapeCodes::GREEN;
         }
 
-        if ($this->getDaysOfLive() >= 3) {
+        if ($this->getLivingDays() >= 3) {
             $startColor = EscapeCodes::MAGENTA;
         }
 

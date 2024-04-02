@@ -6,25 +6,13 @@ namespace App\Models\Cells;
 
 abstract class AbstractCell
 {
-    protected bool $alive;
-
-    protected ?int $daysOfLive;
-
-    protected int $x;
-
-    protected int $y;
-
-    public function __construct(bool $alive, int $x, int $y, ?int $daysOfLive = 0)
-    {
-        $this->alive = $alive;
-        $this->x = $x;
-        $this->y = $y;
-
-        if ($daysOfLive < 0) {
-            throw new \LogicException('Days of live cannot be less than zero.');
-        }
-
-        $this->daysOfLive = $daysOfLive;
+    public function __construct(
+        protected bool $alive,
+        protected int $x,
+        protected int $y,
+        protected ?int $livingDays = 0,
+        protected ?int $deathDays = null,
+    ) {
     }
 
     abstract public function isAlive(): bool;
@@ -37,9 +25,9 @@ abstract class AbstractCell
 
     abstract public function getAliveCell(): string;
 
-    public function getDaysOfLive(): int
+    public function getLivingDays(): int
     {
-        return $this->daysOfLive;
+        return $this->livingDays;
     }
 
     public function __toString(): string
@@ -47,5 +35,15 @@ abstract class AbstractCell
         return $this->alive
             ? $this->getAliveCell()
             : $this->getDeadCell();
+    }
+
+    public function getX(): int
+    {
+        return $this->x;
+    }
+
+    public function getY(): int
+    {
+        return $this->y;
     }
 }

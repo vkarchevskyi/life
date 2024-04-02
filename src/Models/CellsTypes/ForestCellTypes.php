@@ -6,11 +6,11 @@ namespace App\Models\CellsTypes;
 
 enum ForestCellTypes: string
 {
-    case WOLF_CHAR = '🐺';
+    case WOLF = '🐺';
 
-    case RABBIT_CHAR = '🐰';
+    case RABBIT = '🐰';
 
-    case BEAR_CHAR = '🐻';
+    case BEAR = '🐻';
 
     case PLANT = '🌱';
 

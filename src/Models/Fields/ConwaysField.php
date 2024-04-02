@@ -29,7 +29,7 @@ class ConwaysField extends AbstractField
                 if (!$cell->isAlive() && $neighborsCount === 3) {
                     $updatedField[$y][$x] = new ConwaysCell(true, $x, $y, 0);
                 } elseif ($cell->isAlive() && $neighborsCount >= 2 && $neighborsCount <= 3) {
-                    $updatedField[$y][$x] = new ConwaysCell(true, $x, $y, $cell->getDaysOfLive() + 1);
+                    $updatedField[$y][$x] = new ConwaysCell(true, $x, $y, $cell->getLivingDays() + 1);
                 } else {
                     $updatedField[$y][$x] = new ConwaysCell(false, $x, $y);
                 }
