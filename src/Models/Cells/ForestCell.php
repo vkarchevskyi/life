@@ -10,9 +10,9 @@ class ForestCell extends AbstractCell
 {
     public readonly ForestCellTypes $type;
 
-    public function __construct(ForestCellTypes $type, bool $alive, ?int $daysOfLive = 0)
+    public function __construct(ForestCellTypes $type, bool $alive, int $x, int $y, ?int $daysOfLive = 0)
     {
-        parent::__construct($alive, $daysOfLive);
+        parent::__construct($alive, $daysOfLive, $x, $y);
 
         $this->type = $type;
     }

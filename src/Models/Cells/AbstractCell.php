@@ -10,9 +10,15 @@ abstract class AbstractCell
 
     protected ?int $daysOfLive;
 
-    public function __construct(bool $alive, ?int $daysOfLive = 0)
+    protected int $x;
+
+    protected int $y;
+
+    public function __construct(bool $alive, int $x, int $y, ?int $daysOfLive = 0)
     {
         $this->alive = $alive;
+        $this->x = $x;
+        $this->y = $y;
 
         if ($daysOfLive < 0) {
             throw new \LogicException('Days of live cannot be less than zero.');

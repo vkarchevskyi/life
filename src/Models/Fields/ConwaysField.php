@@ -27,11 +27,11 @@ class ConwaysField extends AbstractField
                 $cell = $this->gameField[$y][$x];
 
                 if (!$cell->isAlive() && $neighborsCount === 3) {
-                    $updatedField[$y][$x] = new ConwaysCell(true, 0);
+                    $updatedField[$y][$x] = new ConwaysCell(true, $x, $y, 0);
                 } elseif ($cell->isAlive() && $neighborsCount >= 2 && $neighborsCount <= 3) {
-                    $updatedField[$y][$x] = new ConwaysCell(true, $cell->getDaysOfLive() + 1);
+                    $updatedField[$y][$x] = new ConwaysCell(true, $x, $y, $cell->getDaysOfLive() + 1);
                 } else {
-                    $updatedField[$y][$x] = new ConwaysCell(false);
+                    $updatedField[$y][$x] = new ConwaysCell(false, $x, $y);
                 }
             }
         }
@@ -50,7 +50,7 @@ class ConwaysField extends AbstractField
             $gameField[$y] = [];
 
             for ($x = 0; $x < $this->xSize; $x++) {
-                $gameField[$y][$x] = new ConwaysCell((bool)random_int(0, 1));
+                $gameField[$y][$x] = new ConwaysCell((bool)random_int(0, 1), $x, $y);
             }
         }
 

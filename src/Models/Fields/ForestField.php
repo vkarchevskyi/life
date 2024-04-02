@@ -56,6 +56,8 @@ class ForestField extends AbstractField
                 $gameField[$y][$x] = new ForestCell(
                     $forestCellType,
                     $alive,
+                    $x,
+                    $y,
                     $this->getLivingDays($forestCellType)
                 );
             }
