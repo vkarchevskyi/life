@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace App\Views\Console;
 
-use App\Models\Commands\ConsoleCommand;
 use App\Models\Fields\AbstractField;
 use App\Models\Fields\ConwaysField;
 use App\Models\Fields\ForestField;
@@ -12,34 +11,6 @@ use App\Views\AbstractView;
 
 class ConsoleView extends AbstractView
 {
-    public function clearConsole(): void
-    {
-        if (PHP_OS_FAMILY === 'Windows') {
-            echo EscapeCodes::CLEAR_TERMINAL->value;
-        } else {
-            system("clear");
-        }
-    }
-
-    public function printField(AbstractField $field): void
-    {
-        $xSize = $field->getXSize();
-        $ySize = $field->getYSize();
-
-        for ($y = 0; $y < $ySize; $y++) {
-            for ($x = 0; $x < $xSize; $x++) {
-                echo $field->getCell($x, $y);
-            }
-
-            echo PHP_EOL;
-        }
-    }
-
-    public function printFieldInfo(AbstractField $field): void
-    {
-        // TODO: implement this method
-    }
-
     #[\Override] public function getX(): string
     {
         return readline('Select x size of field: ');
@@ -95,5 +66,42 @@ class ConsoleView extends AbstractView
     public function printIncorrectDataMessage(): void
     {
         echo "Incorrect data. Please try again.\n";
+    }
+
+    public function printField(AbstractField $field): void
+    {
+        $xSize = $field->getXSize();
+        $ySize = $field->getYSize();
+
+        for ($y = 0; $y < $ySize; $y++) {
+            for ($x = 0; $x < $xSize; $x++) {
+                echo $field->getCell($x, $y);
+            }
+
+            echo PHP_EOL;
+        }
+    }
+
+    public function printFieldInfo(AbstractField $field): void
+    {
+        $cellTypes = $field->getFieldInformation();
+
+        $cellTypes['TOTAL'] = array_reduce($cellTypes, function (int $total, int $quantity) {
+            $total += $quantity;
+            return $total;
+        }, 0);
+
+        foreach ($cellTypes as $cellType => $cellsQuantity) {
+            echo "$cellType: $cellsQuantity\n";
+        }
+    }
+
+    public function clearConsole(): void
+    {
+        if (PHP_OS_FAMILY === 'Windows') {
+            echo EscapeCodes::CLEAR_TERMINAL->value;
+        } else {
+            system("clear");
+        }
     }
 }

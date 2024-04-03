@@ -98,14 +98,14 @@ class ForestField extends AbstractField
             $gameField[$y] = [];
 
             for ($x = 0; $x < $this->xSize; $x++) {
-                $cellType = random_int(1, 13);
+                $cellType = random_int(1, 15);
 
                 $forestCellType = match ($cellType) {
                     1 => ForestCellTypes::BEAR,
                     2, 3, 4 => ForestCellTypes::RABBIT,
-                    5, 6 => ForestCellTypes::WOLF,
-                    7, 8, 9, 10, 11, 12 => ForestCellTypes::PLANT,
-                    13 => ForestCellTypes::WATER,
+                    5, 6, 7, 8, => ForestCellTypes::WOLF,
+                    9, 10, 11, 12, 13, 14 => ForestCellTypes::PLANT,
+                    15 => ForestCellTypes::WATER,
                     default => throw new RandomException('Incorrect generated number')
                 };
 
@@ -352,5 +352,28 @@ class ForestField extends AbstractField
             ForestCell::getDefaultLivingDays(ForestCellTypes::PLANT),
             ForestCell::getDefaultDeathDays(ForestCellTypes::PLANT)
         );
+    }
+
+    #[\Override] public function getFieldInformation(): array
+    {
+        $cellTypes = [];
+
+        for ($y = 0; $y < $this->ySize; $y++) {
+            for ($x = 0; $x < $this->xSize; $x++) {
+                /** @var ForestCell $cell */
+                $cell = &$this->gameField[$y][$x];
+                $typeName = ucfirst(strtolower($cell->getType()->name)) . ($cell->isAlive() ? "_ALIVE" : "_DEAD");
+
+                if (!isset($cellTypes[$typeName])) {
+                    $cellTypes[$typeName] = 0;
+                }
+
+                $cellTypes[$typeName]++;
+
+                unset($cell);
+            }
+        }
+
+        return $cellTypes;
     }
 }

@@ -49,6 +49,11 @@ abstract class AbstractField
     abstract public function generateField(): void;
 
     /**
+     * @return array<string, int>
+     */
+    abstract public function getFieldInformation(): array;
+
+    /**
      * @return int
      */
     public function getXSize(): int

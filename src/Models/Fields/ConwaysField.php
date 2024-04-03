@@ -80,4 +80,24 @@ class ConwaysField extends AbstractField
             return $counter;
         }, 0);
     }
+
+    #[\Override] public function getFieldInformation(): array
+    {
+        $cellTypes = [
+            'Dead' => 0,
+            'Alive' => 0
+        ];
+
+        for ($y = 0; $y < $this->ySize; $y++) {
+            for ($x = 0; $x < $this->xSize; $x++) {
+                if ($this->gameField[$y][$x]->isAlive()) {
+                    $cellTypes['Alive']++;
+                } else {
+                    $cellTypes['Dead']++;
+                }
+            }
+        }
+
+        return $cellTypes;
+    }
 }
