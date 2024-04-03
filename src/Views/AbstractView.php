@@ -12,7 +12,7 @@ abstract class AbstractView
 
     abstract public function getConnectedBorders(): string;
 
-    abstract public function getCommand(): string;
+    abstract public function getCommand(bool $fieldWasCreated): string;
 
     abstract public function getStepQuantity(): string;
 

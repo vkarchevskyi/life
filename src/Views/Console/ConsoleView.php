@@ -36,14 +36,19 @@ class ConsoleView extends AbstractView
     }
 
     /**
+     * @param bool $fieldWasCreated
      * @return string
      */
-    #[\Override] public function getCommand(): string
+    #[\Override] public function getCommand(bool $fieldWasCreated): string
     {
         echo "1. Create field.\n";
-        echo "2. Print field information.\n";
-        echo "3. Print field.\n";
-        echo "4. Start game simulation.\n";
+
+        if ($fieldWasCreated) {
+            echo "2. Print field information.\n";
+            echo "3. Print field.\n";
+            echo "4. Start game simulation.\n";
+        }
+
         echo "0. Exit.\n";
 
         return readline('Enter the command: ');

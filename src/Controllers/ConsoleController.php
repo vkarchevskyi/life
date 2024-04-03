@@ -25,8 +25,10 @@ class ConsoleController extends AbstractController
         $working = true;
 
         while ($working) {
+            $fieldWasCreated = isset($this->field);
+
             do {
-                $command = intval($this->view->getCommand());
+                $command = intval($this->view->getCommand($fieldWasCreated));
 
                 if (ConsoleCommand::tryFrom($command)) {
                     $command = ConsoleCommand::from($command);
@@ -36,13 +38,21 @@ class ConsoleController extends AbstractController
                 $this->view->printIncorrectDataMessage();
             } while (true);
 
-            match ($command) {
-                ConsoleCommand::EXIT => $working = false,
-                ConsoleCommand::GET_FIELD => $this->view->printField($this->field),
-                ConsoleCommand::CREATE_FIELD => $this->createField(),
-                ConsoleCommand::PLAY => $this->play($this->getStepQuantity()),
-                ConsoleCommand::GET_FIELD_INFO => $this->view->printFieldInfo($this->field),
-            };
+            if ($fieldWasCreated) {
+                match ($command) {
+                    ConsoleCommand::EXIT => $working = false,
+                    ConsoleCommand::GET_FIELD => $this->view->printField($this->field),
+                    ConsoleCommand::CREATE_FIELD => $this->createField(),
+                    ConsoleCommand::PLAY => $this->play($this->getStepQuantity()),
+                    ConsoleCommand::GET_FIELD_INFO => $this->view->printFieldInfo($this->field),
+                };
+            } else {
+                match ($command) {
+                    ConsoleCommand::EXIT => $working = false,
+                    ConsoleCommand::CREATE_FIELD => $this->createField(),
+                    default => null,
+                };
+            }
         }
     }
 
