@@ -11,21 +11,33 @@ use App\Views\AbstractView;
 
 class ConsoleView extends AbstractView
 {
+    /**
+     * @return string
+     */
     #[\Override] public function getX(): string
     {
         return readline('Select x size of field: ');
     }
 
+    /**
+     * @return string
+     */
     #[\Override] public function getY(): string
     {
         return readline('Select y size of field: ');
     }
 
+    /**
+     * @return string
+     */
     #[\Override] public function getConnectedBorders(): string
     {
         return readline('Should borders be connected (y/n): ');
     }
 
+    /**
+     * @return string
+     */
     #[\Override] public function getCommand(): string
     {
         echo "1. Create field.\n";
@@ -37,11 +49,17 @@ class ConsoleView extends AbstractView
         return readline('Enter the command: ');
     }
 
+    /**
+     * @return string
+     */
     #[\Override] public function getStepQuantity(): string
     {
         return readline('Enter the quantity of steps: ');
     }
 
+    /**
+     * @return string
+     */
     #[\Override] public function getFieldType(): string
     {
         do {
@@ -63,11 +81,18 @@ class ConsoleView extends AbstractView
         } while (true);
     }
 
+    /**
+     * @return void
+     */
     public function printIncorrectDataMessage(): void
     {
         echo "Incorrect data. Please try again.\n";
     }
 
+    /**
+     * @param AbstractField $field
+     * @return void
+     */
     public function printField(AbstractField $field): void
     {
         $xSize = $field->getXSize();
@@ -82,6 +107,12 @@ class ConsoleView extends AbstractView
         }
     }
 
+    /**
+     * Print information about field's cells types or states and it's quantity
+     *
+     * @param AbstractField $field
+     * @return void
+     */
     public function printFieldInfo(AbstractField $field): void
     {
         $cellTypes = $field->getFieldInformation();
@@ -96,6 +127,11 @@ class ConsoleView extends AbstractView
         }
     }
 
+    /**
+     * Cross-platform method to clear console
+     *
+     * @return void
+     */
     public function clearConsole(): void
     {
         if (PHP_OS_FAMILY === 'Windows') {

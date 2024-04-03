@@ -64,23 +64,10 @@ class ConwaysField extends AbstractField
     }
 
     /**
-     * Calculate the quantity of alive cells around cell with given coordinates.
+     * Return information about field's cells states and it's quantity
      *
-     * @param int $x
-     * @param int $y
-     * @return int
+     * @return array<string, int>
      */
-    protected function calculateNeighbors(int $x, int $y): int
-    {
-        $neighbors = $this->getNeighborhoods($x, $y);
-
-        /* @var AbstractCell $cell */
-        return array_reduce($neighbors, function ($counter, $cell) {
-            $counter += (int)$cell->isAlive();
-            return $counter;
-        }, 0);
-    }
-
     #[\Override] public function getFieldInformation(): array
     {
         $cellTypes = [
@@ -99,5 +86,23 @@ class ConwaysField extends AbstractField
         }
 
         return $cellTypes;
+    }
+
+    /**
+     * Calculate the quantity of alive cells around cell with given coordinates.
+     *
+     * @param int $x
+     * @param int $y
+     * @return int
+     */
+    protected function calculateNeighbors(int $x, int $y): int
+    {
+        $neighbors = $this->getNeighborhoods($x, $y);
+
+        /* @var AbstractCell $cell */
+        return array_reduce($neighbors, function ($counter, $cell) {
+            $counter += (int)$cell->isAlive();
+            return $counter;
+        }, 0);
     }
 }

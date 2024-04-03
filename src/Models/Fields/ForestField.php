@@ -126,6 +126,34 @@ class ForestField extends AbstractField
     }
 
     /**
+     * Return information about field's cells types and it's quantity
+     *
+     * @return array<string, int>
+     */
+    #[\Override] public function getFieldInformation(): array
+    {
+        $cellTypes = [];
+
+        for ($y = 0; $y < $this->ySize; $y++) {
+            for ($x = 0; $x < $this->xSize; $x++) {
+                /** @var ForestCell $cell */
+                $cell = &$this->gameField[$y][$x];
+                $typeName = ucfirst(strtolower($cell->getType()->name)) . ($cell->isAlive() ? "_ALIVE" : "_DEAD");
+
+                if (!isset($cellTypes[$typeName])) {
+                    $cellTypes[$typeName] = 0;
+                }
+
+                $cellTypes[$typeName]++;
+
+                unset($cell);
+            }
+        }
+
+        return $cellTypes;
+    }
+
+    /**
      * Find cells, where rabbit will be in safe, than find the cell with plant to breed.
      * Otherwise, move to any direction. If there are no available moves, just do nothing.
      *
@@ -342,6 +370,13 @@ class ForestField extends AbstractField
         $this->makeDeadPlant($bearCell->getX(), $bearCell->getY());
     }
 
+    /**
+     * Make a dead plant cell in field with given coordinates
+     *
+     * @param int $x
+     * @param int $y
+     * @return void
+     */
     private function makeDeadPlant(int $x, int $y): void
     {
         $this->gameField[$y][$x] = new ForestCell(
@@ -352,28 +387,5 @@ class ForestField extends AbstractField
             ForestCell::getDefaultLivingDays(ForestCellTypes::PLANT),
             ForestCell::getDefaultDeathDays(ForestCellTypes::PLANT)
         );
-    }
-
-    #[\Override] public function getFieldInformation(): array
-    {
-        $cellTypes = [];
-
-        for ($y = 0; $y < $this->ySize; $y++) {
-            for ($x = 0; $x < $this->xSize; $x++) {
-                /** @var ForestCell $cell */
-                $cell = &$this->gameField[$y][$x];
-                $typeName = ucfirst(strtolower($cell->getType()->name)) . ($cell->isAlive() ? "_ALIVE" : "_DEAD");
-
-                if (!isset($cellTypes[$typeName])) {
-                    $cellTypes[$typeName] = 0;
-                }
-
-                $cellTypes[$typeName]++;
-
-                unset($cell);
-            }
-        }
-
-        return $cellTypes;
     }
 }
