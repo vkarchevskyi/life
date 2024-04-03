@@ -217,7 +217,7 @@ class ForestField extends AbstractField
     }
 
     /**
-     * First of all, find cells, where wolf will eat rabbit.
+     * First of all, find cell, where wolf will eat rabbit.
      * If there are not such moves, just make random move on cell with plant type.
      *
      * @param ForestCell $cell
@@ -277,6 +277,9 @@ class ForestField extends AbstractField
     }
 
     /**
+     * First of all, find cell, where wolf will eat rabbit. If there are no such cells, find cell,
+     * where bear will eat wolf. Otherwise, just make random move on cell with plant type.
+     *
      * @param ForestCell $cell
      * @return ForestCell
      * @throws RandomException
@@ -306,6 +309,15 @@ class ForestField extends AbstractField
         return $cell;
     }
 
+    /**
+     * If type of $cellToMove is rabbit, increase livingDays on 2 and move.
+     * If type of $cellToMove is wolf, increase livingDays on 1 and move.
+     * Otherwise, just make move and change type of previous cell to dead plant.
+     *
+     * @param ForestCell $bearCell
+     * @param ForestCell $cellToMove
+     * @return void
+     */
     private function makeMoveForBear(ForestCell $bearCell, ForestCell $cellToMove): void
     {
         $newY = $cellToMove->getY();

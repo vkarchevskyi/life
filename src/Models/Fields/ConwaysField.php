@@ -10,6 +10,14 @@ use Random\RandomException;
 
 class ConwaysField extends AbstractField
 {
+    /**
+     * Make next step of simulation in current field.
+     * If dead cell has 3 neighbors, it becomes alive.
+     * If live cell has 2 or 3 neighbors, it stays alive.
+     * Otherwise, live cell become dead cell and dead cell remains dead.
+     *
+     * @return void
+     */
     #[\Override] public function nextStep(): void
     {
         $updatedField = [];
@@ -35,6 +43,9 @@ class ConwaysField extends AbstractField
     }
 
     /**
+     * Randomly generate game field
+     *
+     * @return void
      * @throws RandomException
      */
     #[\Override] public function generateField(): void
@@ -52,6 +63,13 @@ class ConwaysField extends AbstractField
         $this->gameField = $gameField;
     }
 
+    /**
+     * Calculate the quantity of alive cells around cell with given coordinates.
+     *
+     * @param int $x
+     * @param int $y
+     * @return int
+     */
     protected function calculateNeighbors(int $x, int $y): int
     {
         $neighbors = $this->getNeighborhoods($x, $y);
