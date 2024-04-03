@@ -6,15 +6,15 @@ namespace App\Views;
 
 abstract class AbstractView
 {
-    abstract public function getX(): int;
+    abstract public function getX(): string;
 
-    abstract public function getY(): int;
+    abstract public function getY(): string;
 
-    abstract public function getConnectedBorders(): bool;
+    abstract public function getConnectedBorders(): string;
 
-    abstract public function getCommand(): int;
+    abstract public function getCommand(): string;
 
-    abstract public function getStepQuantity(): int;
+    abstract public function getStepQuantity(): string;
 
     abstract public function getFieldType(): string;
 }

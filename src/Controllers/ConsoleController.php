@@ -24,33 +24,51 @@ class ConsoleController extends AbstractController
     {
         $working = true;
 
-        do {
-            $command = ConsoleCommand::from($this->view->getCommand());
+        while ($working) {
+            do {
+                $command = intval($this->view->getCommand());
+
+                if (ConsoleCommand::tryFrom($command)) {
+                    $command = ConsoleCommand::from($command);
+                    break;
+                }
+
+                $this->view->printIncorrectDataMessage();
+            } while (true);
 
             match ($command) {
                 ConsoleCommand::EXIT => $working = false,
                 ConsoleCommand::GET_FIELD => $this->view->printField($this->field),
                 ConsoleCommand::CREATE_FIELD => $this->createField(),
-                ConsoleCommand::PLAY => $this->play($this->view->getStepQuantity()),
+                ConsoleCommand::PLAY => $this->play($this->getStepQuantity()),
                 ConsoleCommand::GET_FIELD_INFO => $this->view->printFieldInfo($this->field),
             };
-
-        } while ($working);
+        }
     }
 
     #[\Override] protected function getX(): int
     {
-        return $this->view->getX();
+        do {
+            $xSize = $this->view->getX();
+        } while (!is_numeric($xSize) || $xSize <= 0);
+
+        return intval($xSize);
     }
 
     #[\Override] protected function getY(): int
     {
-        return $this->view->getY();
+        do {
+            $ySize = $this->view->getY();
+        } while (!is_numeric($ySize) || $ySize <= 0);
+
+        return intval($ySize);
     }
 
     #[\Override] protected function getConnectedBorders(): bool
     {
-        return $this->view->getConnectedBorders();
+        $response = $this->view->getConnectedBorders();
+
+        return !in_array($response, ['no', 'n', 'nope']);
     }
 
     #[\Override] protected function createField(): void
@@ -74,5 +92,14 @@ class ConsoleController extends AbstractController
             usleep(50000);
             $this->field->nextStep();
         }
+    }
+
+    #[\Override] protected function getStepQuantity(): int
+    {
+        do {
+            $quantity = $this->view->getStepQuantity();
+        } while (!is_numeric($quantity) || $quantity < 0);
+
+        return intval($quantity);
     }
 }

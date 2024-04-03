@@ -40,57 +40,35 @@ class ConsoleView extends AbstractView
         // TODO: implement this method
     }
 
-    #[\Override] public function getX(): int
+    #[\Override] public function getX(): string
     {
-        do {
-            $xSize = readline('Select x size of field: ');
-        } while (!is_numeric($xSize) || $xSize <= 0);
-
-        return intval($xSize);
+        return readline('Select x size of field: ');
     }
 
-    #[\Override] public function getY(): int
+    #[\Override] public function getY(): string
     {
-        do {
-            $ySize = readline('Select y size of field: ');
-        } while (!is_numeric($ySize) || $ySize <= 0);
-
-        return intval($ySize);
+        return readline('Select y size of field: ');
     }
 
-    #[\Override] public function getConnectedBorders(): bool
+    #[\Override] public function getConnectedBorders(): string
     {
-        $response = readline('Should borders be connected (y/n): ');
-
-        return !in_array($response, ['no', 'n', 'nope']);
+        return readline('Should borders be connected (y/n): ');
     }
 
-    #[\Override] public function getCommand(): int
+    #[\Override] public function getCommand(): string
     {
-        do {
-            echo "1. Create field.\n";
-            echo "2. Print field information.\n";
-            echo "3. Print field.\n";
-            echo "4. Start game simulation.\n";
-            echo "0. Exit.\n";
+        echo "1. Create field.\n";
+        echo "2. Print field information.\n";
+        echo "3. Print field.\n";
+        echo "4. Start game simulation.\n";
+        echo "0. Exit.\n";
 
-            $command = intval(readline('Enter the command: '));
-
-            if (ConsoleCommand::tryFrom($command)) {
-                return ConsoleCommand::from($command)->value;
-            }
-
-            echo "Incorrect data. Please try again.\n";
-        } while (true);
+        return readline('Enter the command: ');
     }
 
-    #[\Override] public function getStepQuantity(): int
+    #[\Override] public function getStepQuantity(): string
     {
-        do {
-            $quantity = readline('Enter the quantity of steps: ');
-        } while (!is_numeric($quantity) || $quantity < 0);
-
-        return intval($quantity);
+        return readline('Enter the quantity of steps: ');
     }
 
     #[\Override] public function getFieldType(): string
@@ -112,5 +90,10 @@ class ConsoleView extends AbstractView
 
             echo "Incorrect data. Please try again.\n";
         } while (true);
+    }
+
+    public function printIncorrectDataMessage(): void
+    {
+        echo "Incorrect data. Please try again.\n";
     }
 }

@@ -17,4 +17,6 @@ abstract class AbstractController
     abstract protected function createField(): void;
 
     abstract protected function play(int $stepQuantity): void;
+
+    abstract protected function getStepQuantity(): int;
 }
