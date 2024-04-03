@@ -17,10 +17,6 @@ abstract class AbstractCell
 
     abstract public function isAlive(): bool;
 
-    abstract public function becomeAlive(): void;
-
-    abstract public function becomeDead(): void;
-
     abstract public function getDeadCell(): string;
 
     abstract public function getAliveCell(): string;

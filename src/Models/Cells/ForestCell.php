@@ -38,20 +38,6 @@ class ForestCell extends AbstractCell
         return $this->alive;
     }
 
-    #[\Override] public function becomeAlive(): void
-    {
-        $this->alive = true;
-
-        $this->livingDays = static::getDefaultLivingDays($this->type);
-    }
-
-    #[\Override] public function becomeDead(): void
-    {
-        $this->alive = false;
-
-        $this->livingDays = static::getDefaultDeathDays($this->type);
-    }
-
     #[\Override] public function getDeadCell(): string
     {
         return "  ";

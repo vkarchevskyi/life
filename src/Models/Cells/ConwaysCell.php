@@ -13,16 +13,6 @@ class ConwaysCell extends AbstractCell
         return $this->alive;
     }
 
-    #[\Override] public function becomeAlive(): void
-    {
-        $this->alive = true;
-    }
-
-    #[\Override] public function becomeDead(): void
-    {
-        $this->alive = false;
-    }
-
     #[\Override] public function getDeadCell(): string
     {
         return " ";
