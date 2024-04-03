@@ -10,11 +10,6 @@ use Random\RandomException;
 
 class ConwaysField extends AbstractField
 {
-    public function __construct(int $xSize, int $ySize, bool $connectBorders)
-    {
-        parent::__construct($xSize, $ySize, $connectBorders);
-    }
-
     #[\Override] public function nextStep(): void
     {
         $updatedField = [];

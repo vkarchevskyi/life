@@ -13,12 +13,10 @@ use Random\RandomException;
  * */
 class ForestField extends AbstractField
 {
-    public function __construct(int $xSize, int $ySize, bool $connectBorders)
-    {
-        parent::__construct($xSize, $ySize, $connectBorders);
-    }
-
     /**
+     * Make next step of simulation in current field
+     *
+     * @return void
      * @throws RandomException
      */
     #[\Override] public function nextStep(): void
@@ -87,6 +85,9 @@ class ForestField extends AbstractField
     }
 
     /**
+     * Randomly generate game field
+     *
+     * @return void
      * @throws RandomException
      */
     #[\Override] public function generateField(): void
@@ -178,6 +179,14 @@ class ForestField extends AbstractField
         return $cell;
     }
 
+    /**
+     * Make move for rabbit. If rabbit move to the cell with alive plant, create a child
+     * in previous rabbit position. Otherwise, change type of previous cell to dead plant
+     *
+     * @param ForestCell $rabbitCell
+     * @param ForestCell $cellToMove
+     * @return void
+     */
     private function makeMoveForRabbit(ForestCell $rabbitCell, ForestCell $cellToMove): void
     {
         $newY = $cellToMove->getY();
@@ -208,6 +217,11 @@ class ForestField extends AbstractField
     }
 
     /**
+     * First of all, find cells, where wolf will eat rabbit.
+     * If there are not such moves, just make random move on cell with plant type.
+     *
+     * @param ForestCell $cell
+     * @return ForestCell
      * @throws RandomException
      */
     private function findTheBestCellToMoveForWolf(ForestCell $cell): ForestCell
@@ -238,6 +252,14 @@ class ForestField extends AbstractField
         return $cell;
     }
 
+    /**
+     * If type of $cellToMove is rabbit, increase livingDays on 2 and move.
+     * Otherwise, just make move and change type of previous cell to dead plant.
+     *
+     * @param ForestCell $wolfCell
+     * @param ForestCell $cellToMove
+     * @return void
+     */
     private function makeMoveForWolf(ForestCell $wolfCell, ForestCell $cellToMove): void
     {
         $newY = $cellToMove->getY();
@@ -255,6 +277,8 @@ class ForestField extends AbstractField
     }
 
     /**
+     * @param ForestCell $cell
+     * @return ForestCell
      * @throws RandomException
      */
     private function findTheBestCellToMoveForBear(ForestCell $cell): ForestCell
