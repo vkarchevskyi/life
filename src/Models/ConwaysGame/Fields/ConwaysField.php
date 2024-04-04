@@ -2,14 +2,20 @@
 
 declare(strict_types=1);
 
-namespace App\Models\Fields;
+namespace App\Models\ConwaysGame\Fields;
 
-use App\Models\Cells\AbstractCell;
-use App\Models\Cells\ConwaysCell;
+use App\Models\AbstractGame\Cells\AbstractCell;
+use App\Models\AbstractGame\Fields\AbstractField;
+use App\Models\ConwaysGame\Cells\AbstractConwaysCell;
+use App\Models\ConwaysGame\Cells\DeadConwaysCell;
+use App\Models\ConwaysGame\Cells\LiveConwaysCell;
 use Random\RandomException;
 
 class ConwaysField extends AbstractField
 {
+    /** @var array<array<AbstractConwaysCell>> $gameField */
+    protected array $gameField;
+
     /**
      * Make next step of simulation in current field.
      * If dead cell has 3 neighbors, it becomes alive.
@@ -26,16 +32,7 @@ class ConwaysField extends AbstractField
             for ($x = 0; $x < $this->xSize; $x++) {
                 $neighborsCount = $this->calculateNeighbors($x, $y);
 
-                /* @var AbstractCell $cell */
-                $cell = $this->gameField[$y][$x];
-
-                if (!$cell->isAlive() && $neighborsCount === 3) {
-                    $updatedField[$y][$x] = new ConwaysCell(true, $x, $y, 0);
-                } elseif ($cell->isAlive() && $neighborsCount >= 2 && $neighborsCount <= 3) {
-                    $updatedField[$y][$x] = new ConwaysCell(true, $x, $y, $cell->getLivingDays() + 1);
-                } else {
-                    $updatedField[$y][$x] = new ConwaysCell(false, $x, $y);
-                }
+                $updatedField[$y][$x] = $this->gameField[$y][$x]->getNextMoveCell($neighborsCount);
             }
         }
 
@@ -56,7 +53,9 @@ class ConwaysField extends AbstractField
             $gameField[$y] = [];
 
             for ($x = 0; $x < $this->xSize; $x++) {
-                $gameField[$y][$x] = new ConwaysCell((bool)random_int(0, 1), $x, $y);
+                $cellType = random_int(0, 1) ? LiveConwaysCell::class : DeadConwaysCell::class;
+
+                $gameField[$y][$x] = new $cellType($x, $y);
             }
         }
 

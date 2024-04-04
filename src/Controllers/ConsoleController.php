@@ -4,9 +4,9 @@ declare(strict_types=1);
 
 namespace App\Controllers;
 
-use App\Models\Commands\ConsoleCommand;
-use App\Models\Fields\AbstractField;
-use App\Views\Console\ConsoleView;
+use App\Models\AbstractGame\Fields\AbstractField;
+use App\Views\Console\Constants\ConsoleCommand;
+use App\Views\Console\Views\ConsoleView;
 
 class ConsoleController extends AbstractController
 {

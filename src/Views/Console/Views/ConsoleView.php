@@ -2,12 +2,12 @@
 
 declare(strict_types=1);
 
-namespace App\Views\Console;
+namespace App\Views\Console\Views;
 
-use App\Models\Fields\AbstractField;
-use App\Models\Fields\ConwaysField;
-use App\Models\Fields\ForestField;
+use App\Models\AbstractGame\Fields\AbstractField;
+use App\Models\ConwaysGame\Fields\ConwaysField;
 use App\Views\AbstractView;
+use App\Views\Console\Constants\EscapeCodes;
 
 class ConsoleView extends AbstractView
 {
@@ -76,8 +76,6 @@ class ConsoleView extends AbstractView
             switch ($fieldType) {
                 case 1:
                     return ConwaysField::class;
-                case 2:
-                    return ForestField::class;
                 default:
                     break;
             }

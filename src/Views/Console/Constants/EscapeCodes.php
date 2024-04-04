@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace App\Views\Console;
+namespace App\Views\Console\Constants;
 
 enum EscapeCodes: string
 {

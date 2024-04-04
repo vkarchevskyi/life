@@ -2,9 +2,9 @@
 
 declare(strict_types=1);
 
-namespace App\Models\Fields;
+namespace App\Models\AbstractGame\Fields;
 
-use App\Models\Cells\AbstractCell;
+use App\Models\AbstractGame\Cells\AbstractCell;
 
 abstract class AbstractField
 {
@@ -22,7 +22,7 @@ abstract class AbstractField
 
     protected readonly bool $connectBorders;
 
-    /* @var array<array> $gameField */
+    /** @var array<array<AbstractCell>> $gameField */
     protected array $gameField;
 
 
