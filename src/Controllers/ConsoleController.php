@@ -59,7 +59,7 @@ class ConsoleController extends AbstractController
     #[\Override] protected function getX(): int
     {
         do {
-            $xSize = $this->view->getX();
+            $xSize = $this->view->getFieldXSize();
         } while (!is_numeric($xSize) || $xSize <= 0);
 
         return intval($xSize);
@@ -68,7 +68,7 @@ class ConsoleController extends AbstractController
     #[\Override] protected function getY(): int
     {
         do {
-            $ySize = $this->view->getY();
+            $ySize = $this->view->getFieldYSize();
         } while (!is_numeric($ySize) || $ySize <= 0);
 
         return intval($ySize);

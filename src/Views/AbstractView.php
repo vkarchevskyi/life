@@ -6,9 +6,9 @@ namespace App\Views;
 
 abstract class AbstractView
 {
-    abstract public function getX(): string;
+    abstract public function getFieldXSize(): string;
 
-    abstract public function getY(): string;
+    abstract public function getFieldYSize(): string;
 
     abstract public function getConnectedBorders(): string;
 

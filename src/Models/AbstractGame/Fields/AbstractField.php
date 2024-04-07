@@ -16,6 +16,8 @@ abstract class AbstractField
 
     protected const int START_Y = 0;
 
+    protected const array CELLS = [];
+
     protected readonly int $xSize;
 
     protected readonly int $ySize;
@@ -105,7 +107,7 @@ abstract class AbstractField
      * @param int $y
      * @return array<AbstractCell>
      */
-    protected function getNeighborhoods(int $x, int $y): array
+    public function getNeighborhoods(int $x, int $y): array
     {
         return $this->connectBorders
             ? $this->getNeighborsOnConnectedBoard($x, $y)

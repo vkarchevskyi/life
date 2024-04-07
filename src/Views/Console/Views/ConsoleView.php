@@ -6,6 +6,7 @@ namespace App\Views\Console\Views;
 
 use App\Models\AbstractGame\Fields\AbstractField;
 use App\Models\ConwaysGame\Fields\ConwaysField;
+use App\Models\Forest\Fields\ForestField;
 use App\Views\AbstractView;
 use App\Views\Console\Constants\EscapeCodes;
 
@@ -14,7 +15,7 @@ class ConsoleView extends AbstractView
     /**
      * @return string
      */
-    #[\Override] public function getX(): string
+    #[\Override] public function getFieldXSize(): string
     {
         return readline('Select x size of field: ');
     }
@@ -22,7 +23,7 @@ class ConsoleView extends AbstractView
     /**
      * @return string
      */
-    #[\Override] public function getY(): string
+    #[\Override] public function getFieldYSize(): string
     {
         return readline('Select y size of field: ');
     }
@@ -76,6 +77,8 @@ class ConsoleView extends AbstractView
             switch ($fieldType) {
                 case 1:
                     return ConwaysField::class;
+                case 2:
+                    return ForestField::class;
                 default:
                     break;
             }

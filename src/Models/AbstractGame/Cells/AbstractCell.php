@@ -6,15 +6,12 @@ namespace App\Models\AbstractGame\Cells;
 
 abstract class AbstractCell
 {
-    protected bool $alive;
-
     protected int $x;
 
     protected int $y;
 
-    public function __construct(bool $alive, int $x, int $y)
+    public function __construct(int $x, int $y)
     {
-        $this->alive = $alive;
         $this->x = $x;
         $this->y = $y;
     }
@@ -29,10 +26,5 @@ abstract class AbstractCell
     public function getY(): int
     {
         return $this->y;
-    }
-
-    public function isAlive(): bool
-    {
-        return $this->alive;
     }
 }
