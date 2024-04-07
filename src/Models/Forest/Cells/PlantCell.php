@@ -9,7 +9,7 @@ use App\Models\Forest\Moves\CellMove;
 
 class PlantCell extends AbstractNatureCell
 {
-    protected const int DEATH_DAYS = 3;
+    protected const int DEATH_DAYS = 2;
 
     protected const int LIVING_DAYS = 6;
 
@@ -19,8 +19,8 @@ class PlantCell extends AbstractNatureCell
         int $x,
         int $y,
         bool $alive,
-        int $livingDays = self::DEATH_DAYS,
-        int $deathDays = self::LIVING_DAYS
+        int $livingDays = self::LIVING_DAYS,
+        int $deathDays = self::DEATH_DAYS
     ) {
         parent::__construct($x, $y, $alive, $livingDays, $deathDays);
     }
@@ -42,15 +42,17 @@ class PlantCell extends AbstractNatureCell
 
             if ($this->livingDays <= 0) {
                 $this->alive = false;
+                $this->deathDays = self::DEATH_DAYS;
             }
         } else {
             $this->deathDays--;
 
             if ($this->deathDays <= 0) {
                 $this->alive = true;
+                $this->livingDays = self::LIVING_DAYS;
             }
         }
 
-        return new CellMove($cellToMove);
+        return new CellMove($this);
     }
 }

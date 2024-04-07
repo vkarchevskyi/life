@@ -46,11 +46,9 @@ class ForestField extends AbstractField
         for ($y = 0; $y < $this->ySize; $y++) {
             for ($x = 0; $x < $this->xSize; $x++) {
                 $cell = &$this->gameField[$y][$x];
-
                 $priority = AbstractAnimalCell::PRIORITY;
 
-                if ($this->gameField[$y][$x] instanceof AbstractAnimalCell) {
-                    /** @var AbstractAnimalCell $cell */
+                if ($cell instanceof AbstractAnimalCell) {
                     $priority = $cell::PRIORITY;
                 }
 
@@ -73,31 +71,18 @@ class ForestField extends AbstractField
         $priorities[] = AbstractAnimalCell::PRIORITY;
 
         foreach ($priorities as $priority) {
-            foreach ($cellsCoordinates[$priority] as &$cellCoordinates) {
+            foreach ($cellsCoordinates[$priority] as $cellCoordinates) {
                 $y = $cellCoordinates['y'];
                 $x = $cellCoordinates['x'];
 
                 $cell = &$this->gameField[$y][$x];
 
                 if ($cell instanceof AbstractLiveCell) {
-                    $cellCoordinates['cellToMove'] = $cell->findTheBestCellToMove($this);
-                }
-
-                unset($cell);
-            }
-        }
-
-        foreach ($priorities as $priority) {
-            foreach ($cellsCoordinates[$priority] as $cellCoordinates) {
-                $y = $cellCoordinates['y'];
-                $x = $cellCoordinates['x'];
-                $cellToMove = $cellCoordinates['cellToMove'] ?? null;
-
-                if (isset($cellToMove)) {
-                    /** @var AbstractLiveCell $cell */
-                    $cell = &$this->gameField[$y][$x];
+                    $cellToMove = $cell->findTheBestCellToMove($this);
 
                     $move = $cell->createMove($cellToMove);
+
+                    unset($cell);
 
                     $nextCell = $move->getNextCell();
                     $previousCell = $move->getPreviousCell();
@@ -107,8 +92,6 @@ class ForestField extends AbstractField
                     if (isset($previousCell)) {
                         $this->gameField[$previousCell->getY()][$previousCell->getX()] = $previousCell;
                     }
-
-                    unset($cell);
                 }
             }
         }
@@ -132,9 +115,9 @@ class ForestField extends AbstractField
 
                 $forestCellType = match ($cellType) {
                     1 => BearCell::class,
-                    2, 3, 4 => RabbitCell::class,
-                    5, 6, 7, 8, => WolfCell::class,
-                    9, 10, 11, 12, 13, 14 => PlantCell::class,
+                    2, 3, 4, 5, 6, 7, 8 => RabbitCell::class,
+                    9, 10 => WolfCell::class,
+                    11, 12, 13, 14 => PlantCell::class,
                     15 => WaterCell::class,
                     default => throw new RandomException('Incorrect generated number')
                 };

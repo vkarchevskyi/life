@@ -25,7 +25,7 @@ abstract class AbstractPreyCell extends AbstractAnimalCell
             array_filter(
                 $field->getNeighborhoods($this->getX(), $this->getY()),
                 function (AbstractForestCell $neighbor) {
-                    return $neighbor instanceof AbstractNatureCell && $neighbor::EATABLE;
+                    return $neighbor instanceof AbstractNatureCell;
                 },
             )
         );
@@ -54,8 +54,14 @@ abstract class AbstractPreyCell extends AbstractAnimalCell
         }
 
         for ($i = 0; $i < count($possibleCellsToMove); $i++) {
-            if ($possibleCellsToMove[$i]->isAlive()) {
+            if ($possibleCellsToMove[$i]->isAlive() && $possibleCellsToMove[$i]::EATABLE) {
                 return $possibleCellsToMove[$i];
+            }
+        }
+
+        for ($i = 0; $i < $neighborsCount; $i++) {
+            if ($neighbors[$i]->isAlive() && $neighbors[$i]::EATABLE) {
+                return $neighbors[$i];
             }
         }
 
@@ -91,10 +97,7 @@ abstract class AbstractPreyCell extends AbstractAnimalCell
             && $cellToMove::EATABLE
             && $cellToMove->isAlive()
         ) {
-            $previousCell = new static(
-                $this->x,
-                $this->y
-            );
+            $previousCell = new static($this->x, $this->y);
         } else {
             $previousCell = ForestField::createEmptyCell($this->x, $this->y);
         }

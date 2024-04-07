@@ -6,7 +6,7 @@ namespace App\Models\Forest\Cells;
 
 class RabbitCell extends AbstractPreyCell
 {
-    protected const int LIVING_DAYS = 3;
+    protected const int LIVING_DAYS = 6;
 
     public const int SATIETY = 3;
 

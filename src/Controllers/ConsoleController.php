@@ -97,10 +97,10 @@ class ConsoleController extends AbstractController
     #[\Override] protected function play(int $stepQuantity): void
     {
         for ($i = 0; $i < $stepQuantity; $i++) {
+            $this->field->nextStep();
+            usleep(50000);
             $this->view->clearConsole();
             $this->view->printField($this->field);
-            usleep(50000);
-            $this->field->nextStep();
         }
     }
 
