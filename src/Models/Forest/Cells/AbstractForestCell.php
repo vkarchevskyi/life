@@ -8,4 +8,5 @@ use App\Models\AbstractGame\Cells\AbstractCell;
 
 abstract class AbstractForestCell extends AbstractCell
 {
+    public const int CHANCE_TO_SPAWN = -1;
 }

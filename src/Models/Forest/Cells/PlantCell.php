@@ -9,11 +9,13 @@ use App\Models\Forest\Moves\CellMove;
 
 class PlantCell extends AbstractNatureCell
 {
-    protected const int DEATH_DAYS = 2;
+    protected const int DEATH_DAYS = 1;
 
     protected const int LIVING_DAYS = 6;
 
     public const bool EATABLE = true;
+
+    public const int CHANCE_TO_SPAWN = 4;
 
     public function __construct(
         int $x,

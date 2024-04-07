@@ -107,20 +107,36 @@ class ForestField extends AbstractField
     {
         $this->gameField = [];
 
+        $counter = 0;
+        $maxChance = 0;
+        $probabilities = [];
+
+        /** @var AbstractForestCell $cell */
+        foreach (static::CELLS as $cell) {
+            if ($cell::CHANCE_TO_SPAWN < 0) {
+                throw new \LogicException(
+                    "Please add CHANCE_TO_SPAWN constant with positive value to every cells you use\n"
+                );
+            }
+
+            $maxChance += $cell::CHANCE_TO_SPAWN;
+
+            for ($i = 0; $i < $cell::CHANCE_TO_SPAWN; $i++) {
+                $probabilities[$counter++] = $cell;
+            }
+        }
+
         for ($y = 0; $y < $this->ySize; $y++) {
             $this->gameField[$y] = [];
 
             for ($x = 0; $x < $this->xSize; $x++) {
-                $cellType = random_int(1, 15);
+                $randomClassIndex = random_int(0, $maxChance - 1);
 
-                $forestCellType = match ($cellType) {
-                    1 => BearCell::class,
-                    2, 3, 4, 5, 6, 7, 8 => RabbitCell::class,
-                    9, 10 => WolfCell::class,
-                    11, 12, 13, 14 => PlantCell::class,
-                    15 => WaterCell::class,
-                    default => throw new RandomException('Incorrect generated number')
-                };
+                $forestCellType = $probabilities[$randomClassIndex] ?? null;
+
+                if (!isset($forestCellType)) {
+                    throw new RandomException("Incorrect generated number.\n");
+                }
 
                 if (is_a($forestCellType, AbstractStaticCell::class, true)) {
                     $this->gameField[$y][$x] = new $forestCellType($x, $y);

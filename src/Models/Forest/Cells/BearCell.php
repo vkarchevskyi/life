@@ -14,6 +14,8 @@ class BearCell extends AbstractPredatorCell
 
     public const int PRIORITY = 3;
 
+    public const int CHANCE_TO_SPAWN = 1;
+
     public function __construct(int $x, int $y, int $livingDays = self::LIVING_DAYS)
     {
         parent::__construct($x, $y, true, $livingDays);
