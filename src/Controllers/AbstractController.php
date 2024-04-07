@@ -8,9 +8,9 @@ abstract class AbstractController
 {
     abstract protected function run(): void;
 
-    abstract protected function getX(): int;
+    abstract protected function getFieldXSize(): int;
 
-    abstract protected function getY(): int;
+    abstract protected function getFieldYSize(): int;
 
     abstract protected function getConnectedBorders(): bool;
 

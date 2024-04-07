@@ -56,20 +56,32 @@ class ConsoleController extends AbstractController
         }
     }
 
-    #[\Override] protected function getX(): int
+    #[\Override] protected function getFieldXSize(): int
     {
-        do {
+        while (true) {
             $xSize = $this->view->getFieldXSize();
-        } while (!is_numeric($xSize) || $xSize <= 0);
+
+            if (!is_numeric($xSize) || $xSize <= 0) {
+                echo "Incorrect X size. X size must be a positive integer.\n";
+            } else {
+                break;
+            }
+        }
 
         return intval($xSize);
     }
 
-    #[\Override] protected function getY(): int
+    #[\Override] protected function getFieldYSize(): int
     {
-        do {
+        while (true) {
             $ySize = $this->view->getFieldYSize();
-        } while (!is_numeric($ySize) || $ySize <= 0);
+
+            if (!is_numeric($ySize) || $ySize <= 0) {
+                echo "Incorrect Y size. Y size must be a positive integer.\n";
+            } else {
+                break;
+            }
+        }
 
         return intval($ySize);
     }
@@ -86,8 +98,8 @@ class ConsoleController extends AbstractController
         $fieldType = $this->view->getFieldType();
 
         $this->field = new $fieldType(
-            $this->getX(),
-            $this->gety(),
+            $this->getFieldXSize(),
+            $this->getFieldYSize(),
             $this->getConnectedBorders()
         );
 
@@ -97,18 +109,24 @@ class ConsoleController extends AbstractController
     #[\Override] protected function play(int $stepQuantity): void
     {
         for ($i = 0; $i < $stepQuantity; $i++) {
-            $this->field->nextStep();
-            usleep(50000);
             $this->view->clearConsole();
             $this->view->printField($this->field);
+            usleep(50000);
+            $this->field->nextStep();
         }
     }
 
     #[\Override] protected function getStepQuantity(): int
     {
-        do {
+        while (true) {
             $quantity = $this->view->getStepQuantity();
-        } while (!is_numeric($quantity) || $quantity < 0);
+
+            if (!is_numeric($quantity) || $quantity < 0) {
+                echo "Incorrect quantity. Steps quantity must be a positive integer.\n";
+            } else {
+                break;
+            }
+        }
 
         return intval($quantity);
     }
