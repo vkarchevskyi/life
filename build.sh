@@ -1,1 +1,1 @@
-docker build -t php-cli-app .
+docker build -t life-php .

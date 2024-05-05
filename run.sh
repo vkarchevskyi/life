@@ -1,1 +1,1 @@
-docker run -it --rm -v $(pwd)/index.php:/app/index.php -v $(pwd)/src:/app/src php-cli-app
+docker run -it --rm -v $(pwd)/index.php:/app/index.php -v $(pwd)/src:/app/src life-php
