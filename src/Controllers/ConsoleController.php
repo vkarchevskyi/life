@@ -10,6 +10,8 @@ use App\Views\Console\Views\ConsoleView;
 
 class ConsoleController extends AbstractController
 {
+    protected int $refreshConsoleSpeedInMicroseconds = 50000;
+
     protected ConsoleView $view;
 
     protected AbstractField $field;
@@ -45,6 +47,7 @@ class ConsoleController extends AbstractController
                     ConsoleCommand::CREATE_FIELD => $this->createField(),
                     ConsoleCommand::PLAY => $this->play($this->getStepQuantity()),
                     ConsoleCommand::GET_FIELD_INFO => $this->view->printFieldInfo($this->field),
+                    ConsoleCommand::REFRESH_SPEED => $this->setConsoleSpeedInMicroseconds(),
                 };
             } else {
                 match ($command) {
@@ -111,7 +114,7 @@ class ConsoleController extends AbstractController
         for ($i = 0; $i < $stepQuantity; $i++) {
             $this->view->clearConsole();
             $this->view->printField($this->field);
-            usleep(50000);
+            usleep($this->refreshConsoleSpeedInMicroseconds);
             $this->field->nextStep();
         }
     }
@@ -129,5 +132,20 @@ class ConsoleController extends AbstractController
         }
 
         return intval($quantity);
+    }
+
+    protected function setConsoleSpeedInMicroseconds(): void
+    {
+        while (true) {
+            $seconds = $this->view->getConsoleSpeed();
+
+            if (!is_numeric($seconds) || $seconds < 0) {
+                echo "Incorrect speed. Speed must be a positive integer.\n";
+            } else {
+                break;
+            }
+        }
+
+        $this->refreshConsoleSpeedInMicroseconds = intval($seconds) * 1000000;// convert seconds to microseconds
     }
 }

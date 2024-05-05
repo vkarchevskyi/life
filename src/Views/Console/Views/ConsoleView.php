@@ -48,6 +48,7 @@ class ConsoleView extends AbstractView
             echo "2. Print field information.\n";
             echo "3. Print field.\n";
             echo "4. Start game simulation.\n";
+            echo "5. Change refresh console speed.\n";
         }
 
         echo "0. Exit.\n";
@@ -83,7 +84,7 @@ class ConsoleView extends AbstractView
                     break;
             }
 
-            echo "Incorrect data. Please try again.\n";
+            $this->printIncorrectDataMessage();
         } while (true);
     }
 
@@ -145,5 +146,10 @@ class ConsoleView extends AbstractView
         } else {
             system("clear");
         }
+    }
+
+    public function getConsoleSpeed(): string
+    {
+        return readline("Enter the refresh screen speed in seconds: ");
     }
 }

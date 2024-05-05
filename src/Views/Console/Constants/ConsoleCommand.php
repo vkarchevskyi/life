@@ -15,4 +15,6 @@ enum ConsoleCommand: int
     case GET_FIELD = 3;
 
     case PLAY = 4;
+
+    case REFRESH_SPEED = 5;
 }
