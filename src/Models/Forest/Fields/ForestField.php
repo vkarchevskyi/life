@@ -19,6 +19,7 @@ use Random\RandomException;
 
 /**
  * @method array<AbstractForestCell> getNeighborhoods(int $x, int $y)
+ * @method setCell(int $x, int $y, AbstractForestCell $cell)
  * */
 class ForestField extends AbstractField
 {

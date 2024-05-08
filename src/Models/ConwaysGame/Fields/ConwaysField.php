@@ -11,6 +11,9 @@ use App\Models\ConwaysGame\Cells\DeadConwaysCell;
 use App\Models\ConwaysGame\Cells\LiveConwaysCell;
 use Random\RandomException;
 
+/**
+ * @method setCell(int $x, int $y, AbstractConwaysCell $cell)
+ */
 class ConwaysField extends AbstractField
 {
     /** @var array<array<AbstractConwaysCell>> $gameField */

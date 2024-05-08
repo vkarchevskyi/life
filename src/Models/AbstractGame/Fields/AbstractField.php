@@ -56,6 +56,23 @@ abstract class AbstractField
     abstract public function getFieldInformation(): array;
 
     /**
+     * @param int $x
+     * @param int $y
+     * @param AbstractCell $cell
+     * @return void
+     */
+    public function setCell(int $x, int $y, AbstractCell $cell): void {
+        if (
+            $x >= static::START_X
+            && $y >= static::START_Y
+            && $x <= $this->xSize
+            && $y <= $this->ySize
+        ) {
+            $this->gameField[$y][$x] = $cell;
+        }
+    }
+
+    /**
      * @return int
      */
     public function getXSize(): int
