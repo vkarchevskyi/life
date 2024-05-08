@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace App\Models\Forest\Cells;
 
 use App\Models\Forest\Fields\ForestField;
+use App\Models\Forest\Moves\CellCoords;
 use App\Models\Forest\Moves\CellMove;
 use Random\RandomException;
 
@@ -15,61 +16,67 @@ abstract class AbstractPreyCell extends AbstractAnimalCell
      * Otherwise, move to any direction. If there are no available moves, just do nothing.
      *
      * @param ForestField $field
-     * @return AbstractForestCell
+     * @return CellCoords
      * @throws RandomException
      */
-    #[\Override] public function findTheBestCellToMove(ForestField $field): AbstractForestCell
+    #[\Override] public function findTheBestCellToMove(ForestField $field): CellCoords
     {
-        /** @var array<AbstractNatureCell> $neighbors */
-        $neighbors = array_values(
+        /** @var array<AbstractForestCell> $neighbors */
+        $neighbors = $field->getNeighborhoods($this->getX(), $this->getY());
+        $neighborsCount = count($neighbors);
+
+        /** @var array<AbstractNatureCell> $possibleCellsToMove */
+        $possibleCellsToMove = array_values(
             array_filter(
-                $field->getNeighborhoods($this->getX(), $this->getY()),
+                $neighbors,
                 function (AbstractForestCell $neighbor) {
                     return $neighbor instanceof AbstractNatureCell;
                 },
             )
         );
 
-        $neighborsCount = count($neighbors);
-        $possibleCellsToMove = $neighbors;
-
         for ($i = 0; $i < $neighborsCount; $i++) {
             if ($neighbors[$i] instanceof AbstractPredatorCell) {
                 $predatorNeighbors = $field->getNeighborhoods($neighbors[$i]->getX(), $neighbors[$i]->getY());
+                $possibleCellsToMove = array_values(
+                    array_filter(
+                        $possibleCellsToMove,
+                        function (AbstractNatureCell $cell) use ($predatorNeighbors) {
+                            foreach ($predatorNeighbors as $predatorNeighbor) {
+                                return !(
+                                    $predatorNeighbor->getX() === $cell->getX()
+                                    && $predatorNeighbor->getY() === $cell->getY()
+                                );
+                            }
 
-                $possibleCellsToMove = array_filter(
-                    $possibleCellsToMove,
-                    function (AbstractForestCell $cell) use ($predatorNeighbors) {
-                        foreach ($predatorNeighbors as $predatorNeighbor) {
-                            return !(
-                                $predatorNeighbor->getX() === $cell->getX()
-                                && $predatorNeighbor->getY() === $cell->getY()
-                            );
+                            return false;
                         }
-
-                        return false;
-                    }
+                    )
                 );
             }
         }
 
         for ($i = 0; $i < count($possibleCellsToMove); $i++) {
             if ($possibleCellsToMove[$i]->isAlive() && $possibleCellsToMove[$i]::EATABLE) {
-                return $possibleCellsToMove[$i];
+//                echo "neighbor_pos\n";
+                return new CellCoords($possibleCellsToMove[$i]->getX(), $possibleCellsToMove[$i]->getY());
             }
         }
 
         for ($i = 0; $i < $neighborsCount; $i++) {
-            if ($neighbors[$i]->isAlive() && $neighbors[$i]::EATABLE) {
-                return $neighbors[$i];
+            if ($neighbors[$i] instanceof AbstractNatureCell && $neighbors[$i]->isAlive() && $neighbors[$i]::EATABLE) {
+//                echo "neighbor\n";
+                return new CellCoords($neighbors[$i]->getX(), $neighbors[$i]->getY());
             }
         }
 
         if ($neighborsCount) {
-            return $neighbors[random_int(0, $neighborsCount - 1)];
+            $randomNeighbor = $neighbors[random_int(0, $neighborsCount - 1)];
+//            echo "rand_neighbor\n";
+            return new CellCoords($randomNeighbor->getX(), $randomNeighbor->getY());
         }
 
-        return $this;
+        return new CellCoords($this->x, $this->y);
     }
 
     /**
@@ -98,8 +105,10 @@ abstract class AbstractPreyCell extends AbstractAnimalCell
             && $cellToMove->isAlive()
         ) {
             $previousCell = new static($this->x, $this->y);
-        } else {
+        } elseif ($this->x !== $cellToMove->getX() || $this->y !== $cellToMove->getY()) {
             $previousCell = ForestField::createEmptyCell($this->x, $this->y);
+        } else {
+            $previousCell = null;
         }
 
         return new CellMove($nextCell, $previousCell);

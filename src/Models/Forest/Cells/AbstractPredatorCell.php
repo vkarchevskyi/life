@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace App\Models\Forest\Cells;
 
 use App\Models\Forest\Fields\ForestField;
+use App\Models\Forest\Moves\CellCoords;
 use App\Models\Forest\Moves\CellMove;
 use Random\RandomException;
 
@@ -17,10 +18,10 @@ abstract class AbstractPredatorCell extends AbstractAnimalCell
      * where predator will eat other weaker predator. Otherwise, just make random move on cell with plant type.
      *
      * @param ForestField $field
-     * @return AbstractForestCell
+     * @return CellCoords
      * @throws RandomException
      */
-    #[\Override] public function findTheBestCellToMove(ForestField $field): AbstractForestCell
+    #[\Override] public function findTheBestCellToMove(ForestField $field): CellCoords
     {
         /** @var array<AbstractForestCell> $neighbors */
         $neighbors = array_values(
@@ -38,21 +39,22 @@ abstract class AbstractPredatorCell extends AbstractAnimalCell
 
         for ($i = 0; $i < $neighborsCount; $i++) {
             if ($neighbors[$i] instanceof AbstractPreyCell) {
-                return $neighbors[$i];
+                return new CellCoords($neighbors[$i]->getX(), $neighbors[$i]->getY());
             }
         }
 
         for ($i = 0; $i < $neighborsCount; $i++) {
             if ($neighbors[$i] instanceof AbstractPredatorCell) {
-                return $neighbors[$i];
+                return new CellCoords($neighbors[$i]->getX(), $neighbors[$i]->getY());
             }
         }
 
         if ($neighborsCount) {
-            return $neighbors[random_int(0, $neighborsCount - 1)];
+            $randomNeighbor = $neighbors[random_int(0, $neighborsCount - 1)];
+            return new CellCoords($randomNeighbor->getX(), $randomNeighbor->getY());
         }
 
-        return $this;
+        return new CellCoords($this->x, $this->y);
     }
 
     /**

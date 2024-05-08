@@ -46,7 +46,7 @@ class ConsoleController extends AbstractController
                     ConsoleCommand::GET_FIELD => $this->view->printField($this->field),
                     ConsoleCommand::CREATE_FIELD => $this->createField(),
                     ConsoleCommand::PLAY => $this->play($this->getStepQuantity()),
-                    ConsoleCommand::GET_FIELD_INFO => $this->view->printFieldInfo($this->field),
+                    ConsoleCommand::GET_FIELD_INFO => $this->view->printFieldInfo($this->getFieldData()),
                     ConsoleCommand::REFRESH_SPEED => $this->setConsoleSpeedInMicroseconds(),
                 };
             } else {
@@ -132,6 +132,18 @@ class ConsoleController extends AbstractController
         }
 
         return intval($quantity);
+    }
+
+    public function getFieldData(): array
+    {
+        $cellTypes = $this->field->getFieldInformation();
+
+        $cellTypes['TOTAL'] = array_reduce($cellTypes, function (int $total, int $quantity) {
+            $total += $quantity;
+            return $total;
+        }, 0);
+
+        return $cellTypes;
     }
 
     protected function setConsoleSpeedInMicroseconds(): void

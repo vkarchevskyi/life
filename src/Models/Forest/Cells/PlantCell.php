@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace App\Models\Forest\Cells;
 
 use App\Models\Forest\Fields\ForestField;
+use App\Models\Forest\Moves\CellCoords;
 use App\Models\Forest\Moves\CellMove;
 
 class PlantCell extends AbstractNatureCell
@@ -32,9 +33,9 @@ class PlantCell extends AbstractNatureCell
         return $this->alive ? '🌱' : $this->getDeadCell();
     }
 
-    #[\Override] public function findTheBestCellToMove(ForestField $field): AbstractForestCell
+    #[\Override] public function findTheBestCellToMove(ForestField $field): CellCoords
     {
-        return $this;
+        return new CellCoords($this->x, $this->y);
     }
 
     #[\Override] public function createMove(AbstractLiveCell $cellToMove): CellMove

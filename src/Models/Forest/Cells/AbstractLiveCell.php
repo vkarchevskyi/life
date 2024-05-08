@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace App\Models\Forest\Cells;
 
 use App\Models\Forest\Fields\ForestField;
+use App\Models\Forest\Moves\CellCoords;
 use App\Models\Forest\Moves\CellMove;
 
 abstract class AbstractLiveCell extends AbstractForestCell
@@ -23,7 +24,7 @@ abstract class AbstractLiveCell extends AbstractForestCell
         $this->livingDays = $livingDays;
     }
 
-    abstract public function findTheBestCellToMove(ForestField $field): AbstractForestCell;
+    abstract public function findTheBestCellToMove(ForestField $field): CellCoords;
 
     abstract public function createMove(AbstractLiveCell $cellToMove): CellMove;
 

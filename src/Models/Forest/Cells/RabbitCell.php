@@ -12,7 +12,7 @@ class RabbitCell extends AbstractPreyCell
 
     public const int PRIORITY = 1;
 
-    public const int CHANCE_TO_SPAWN = 7;
+    public const int CHANCE_TO_SPAWN = 6;
 
     public function __construct(int $x, int $y, int $livingDays = self::LIVING_DAYS)
     {

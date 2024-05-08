@@ -117,18 +117,11 @@ class ConsoleView extends AbstractView
     /**
      * Print information about field's cells types or states and it's quantity
      *
-     * @param AbstractField $field
+     * @param array $cellTypes
      * @return void
      */
-    public function printFieldInfo(AbstractField $field): void
+    public function printFieldInfo(array $cellTypes): void
     {
-        $cellTypes = $field->getFieldInformation();
-
-        $cellTypes['TOTAL'] = array_reduce($cellTypes, function (int $total, int $quantity) {
-            $total += $quantity;
-            return $total;
-        }, 0);
-
         foreach ($cellTypes as $cellType => $cellsQuantity) {
             echo "$cellType: $cellsQuantity\n";
         }

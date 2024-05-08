@@ -15,6 +15,7 @@ use App\Models\Forest\Cells\PlantCell;
 use App\Models\Forest\Cells\RabbitCell;
 use App\Models\Forest\Cells\WaterCell;
 use App\Models\Forest\Cells\WolfCell;
+use App\Models\Forest\Moves\CellCoords;
 use Random\RandomException;
 
 /**
@@ -71,6 +72,11 @@ class ForestField extends AbstractField
 
         $priorities[] = AbstractAnimalCell::PRIORITY;
 
+        /**
+         * @var array<array> $bestMoves
+         */
+        $bestMoves = [];
+
         foreach ($priorities as $priority) {
             foreach ($cellsCoordinates[$priority] as $cellCoordinates) {
                 $y = $cellCoordinates['y'];
@@ -80,20 +86,38 @@ class ForestField extends AbstractField
 
                 if ($cell instanceof AbstractLiveCell) {
                     $cellToMove = $cell->findTheBestCellToMove($this);
-
-                    $move = $cell->createMove($cellToMove);
-
+                    $bestMoves[] = [
+                        'cell' => $this->gameField[$y][$x],
+                        'cellToMoveCoords' => $cellToMove
+                    ];
+                } else {
                     unset($cell);
-
-                    $nextCell = $move->getNextCell();
-                    $previousCell = $move->getPreviousCell();
-
-                    $this->gameField[$nextCell->getY()][$nextCell->getX()] = $nextCell;
-
-                    if (isset($previousCell)) {
-                        $this->gameField[$previousCell->getY()][$previousCell->getX()] = $previousCell;
-                    }
                 }
+            }
+        }
+
+        foreach ($bestMoves as $bestMove) {
+            /** @var CellCoords $cellCoords*/
+            $cellCoords = $bestMove['cellToMoveCoords'];
+
+            /** @var AbstractLiveCell $cell  */
+            $cell = $bestMove['cell'];
+
+            if ($cell !== $this->gameField[$cell->getY()][$cell->getX()]) {
+                continue;
+            }
+
+            $move = $cell->createMove(
+                $this->gameField[$cellCoords->y][$cellCoords->x]
+            );
+
+            $nextCell = $move->getNextCell();
+            $previousCell = $move->getPreviousCell();
+
+            $this->gameField[$nextCell->getY()][$nextCell->getX()] = $nextCell;
+
+            if (isset($previousCell)) {
+                $this->gameField[$previousCell->getY()][$previousCell->getX()] = $previousCell;
             }
         }
     }
@@ -184,6 +208,30 @@ class ForestField extends AbstractField
         }
 
         return $cellTypes;
+    }
+
+    public function getQuantityOfCells(string $classType, ?bool $isAlive = null): int
+    {
+        $counter = 0;
+
+        for ($y = 0; $y < $this->ySize; $y++) {
+            for ($x = 0; $x < $this->xSize; $x++) {
+                $cell = &$this->gameField[$y][$x];
+
+                if (is_a($cell, $classType)) {
+                    if (isset($isAlive) && $cell instanceof AbstractLiveCell && $isAlive !== $cell->isAlive()) {
+                        unset($cell);
+                        break;
+                    }
+
+                    $counter++;
+                }
+
+                unset($cell);
+            }
+        }
+
+        return $counter;
     }
 
     /**
