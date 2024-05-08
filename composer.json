@@ -2,7 +2,8 @@
   "require": {
     "php": ">=8.3",
     "ext-readline": "*",
-    "ext-mbstring": "*"
+    "ext-mbstring": "*",
+    "ext-ctype": "*"
   },
   "autoload": {
     "psr-4": {

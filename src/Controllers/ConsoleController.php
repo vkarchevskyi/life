@@ -64,8 +64,8 @@ class ConsoleController extends AbstractController
         while (true) {
             $xSize = $this->view->getFieldXSize();
 
-            if (!is_numeric($xSize) || $xSize <= 0) {
-                echo "Incorrect X size. X size must be a positive integer.\n";
+            if (!ctype_digit($xSize) || $xSize < 1) {
+                echo "Incorrect X size. X size cannot be less than one.\n";
             } else {
                 break;
             }
@@ -79,8 +79,8 @@ class ConsoleController extends AbstractController
         while (true) {
             $ySize = $this->view->getFieldYSize();
 
-            if (!is_numeric($ySize) || $ySize <= 0) {
-                echo "Incorrect Y size. Y size must be a positive integer.\n";
+            if (!ctype_digit($ySize) || $ySize < 1) {
+                echo "Incorrect Y size. Y size cannot be less than one.\n";
             } else {
                 break;
             }

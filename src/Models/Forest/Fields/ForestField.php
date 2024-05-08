@@ -78,7 +78,7 @@ class ForestField extends AbstractField
         $bestMoves = [];
 
         foreach ($priorities as $priority) {
-            foreach ($cellsCoordinates[$priority] as $cellCoordinates) {
+            foreach ($cellsCoordinates[$priority] ?? [] as $cellCoordinates) {
                 $y = $cellCoordinates['y'];
                 $x = $cellCoordinates['x'];
 

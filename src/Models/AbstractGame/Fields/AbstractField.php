@@ -33,11 +33,11 @@ abstract class AbstractField
         int $ySize = self::DEFAULT_Y_SIZE,
         bool $connectBorders = true
     ) {
-        if ($xSize <= 0) {
-            throw new \LogicException('xSize variable cannot be equal or less than zero.');
+        if ($xSize < 1) {
+            throw new \LogicException('xSize variable cannot be less than one.');
         }
-        if ($ySize <= 0) {
-            throw new \LogicException('ySize variable cannot be equal or less than zero.');
+        if ($ySize < 1) {
+            throw new \LogicException('ySize variable cannot be less than one.');
         }
 
         $this->xSize = $xSize;
@@ -212,34 +212,38 @@ abstract class AbstractField
         $useRight = $x + 1 < $this->xSize;
 
         if ($useTop) {
-            $neighbors[] = $this->gameField[$top][$x];
+            if (isset($this->gameField[$top][$x])) {
+                $neighbors[] = $this->gameField[$top][$x];
+            }
 
-            if ($useLeft) {
+            if ($useLeft && isset($this->gameField[$top][$left])) {
                 $neighbors[] = $this->gameField[$top][$left];
             }
 
-            if ($useRight) {
+            if ($useRight && isset($this->gameField[$top][$right])) {
                 $neighbors[] = $this->gameField[$top][$right];
             }
         }
 
         if ($useBottom) {
-            $neighbors[] = $this->gameField[$bottom][$x];
+            if (isset($this->gameField[$bottom][$x])) {
+                $neighbors[] = $this->gameField[$bottom][$x];
+            }
 
-            if ($useLeft) {
+            if ($useLeft && isset($this->gameField[$bottom][$left])) {
                 $neighbors[] = $this->gameField[$bottom][$left];
             }
 
-            if ($useRight) {
+            if ($useRight && isset($this->gameField[$bottom][$right])) {
                 $neighbors[] = $this->gameField[$bottom][$right];
             }
         }
 
-        if ($useLeft) {
+        if ($useLeft && isset($this->gameField[$y][$left])) {
             $neighbors[] = $this->gameField[$y][$left];
         }
 
-        if ($useRight) {
+        if ($useRight && isset($this->gameField[$y][$right])) {
             $neighbors[] = $this->gameField[$y][$right];
         }
 
