@@ -68,7 +68,7 @@ class ForestField extends AbstractField
             return $key >= 0;
         });
 
-        sort($priorities, SORT_NUMERIC);
+        rsort($priorities, SORT_NUMERIC);
 
         $priorities[] = AbstractAnimalCell::PRIORITY;
 
@@ -87,12 +87,12 @@ class ForestField extends AbstractField
                 if ($cell instanceof AbstractLiveCell) {
                     $cellToMove = $cell->findTheBestCellToMove($this);
                     $bestMoves[] = [
-                        'cell' => $this->gameField[$y][$x],
+                        'cell' => $cell,
                         'cellToMoveCoords' => $cellToMove
                     ];
-                } else {
-                    unset($cell);
                 }
+
+                unset($cell);
             }
         }
 

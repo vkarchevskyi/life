@@ -58,21 +58,29 @@ abstract class AbstractPreyCell extends AbstractAnimalCell
 
         for ($i = 0; $i < count($possibleCellsToMove); $i++) {
             if ($possibleCellsToMove[$i]->isAlive() && $possibleCellsToMove[$i]::EATABLE) {
-//                echo "neighbor_pos\n";
                 return new CellCoords($possibleCellsToMove[$i]->getX(), $possibleCellsToMove[$i]->getY());
             }
         }
 
         for ($i = 0; $i < $neighborsCount; $i++) {
             if ($neighbors[$i] instanceof AbstractNatureCell && $neighbors[$i]->isAlive() && $neighbors[$i]::EATABLE) {
-//                echo "neighbor\n";
                 return new CellCoords($neighbors[$i]->getX(), $neighbors[$i]->getY());
             }
         }
 
+        $neighbors = array_values(
+            array_filter(
+                $neighbors,
+                function (AbstractForestCell $neighbor) {
+                    return $neighbor instanceof AbstractNatureCell;
+                },
+            )
+        );
+
+        $neighborsCount = count($neighbors);
+
         if ($neighborsCount) {
             $randomNeighbor = $neighbors[random_int(0, $neighborsCount - 1)];
-//            echo "rand_neighbor\n";
             return new CellCoords($randomNeighbor->getX(), $randomNeighbor->getY());
         }
 
