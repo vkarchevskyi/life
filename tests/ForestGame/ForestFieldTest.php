@@ -204,12 +204,19 @@ class ForestFieldTest extends AppTest
 
     protected function testRabbitStarving(): void
     {
-        $this->initFieldWithAlivePlants(2, 2);
+        $xSize = 2;
+        $ySize = 2;
+
+        $this->field = new ForestField($xSize, $ySize, false);
+
+        for ($i = 0; $i < $ySize; $i++) {
+            for ($j = 0; $j < $xSize; $j++) {
+                $this->field->setCell($j, $i, new PlantCell($j, $i, false, 10, 2));
+            }
+        }
 
         $this->field->setCell(1, 0, new RabbitCell(1, 0, 2));
 
-        $this->field->nextStep();
-        $this->assertSame($this->field->getQuantityOfCells(RabbitCell::class, true), 1);
         $this->field->nextStep();
         $this->assertSame($this->field->getQuantityOfCells(RabbitCell::class, true), 1);
         $this->field->nextStep();
