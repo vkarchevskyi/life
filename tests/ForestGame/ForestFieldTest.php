@@ -10,9 +10,9 @@ use App\Models\Forest\Cells\RabbitCell;
 use App\Models\Forest\Cells\WaterCell;
 use App\Models\Forest\Cells\WolfCell;
 use App\Models\Forest\Fields\ForestField;
-use Test\AppTest;
+use PHPUnit\Framework\TestCase;
 
-class ForestFieldTest extends AppTest
+class ForestFieldTest extends TestCase
 {
     protected ForestField $field;
 
@@ -39,8 +39,7 @@ class ForestFieldTest extends AppTest
      * 9. wolf die without food
      * 10. rabbit die without food
      */
-
-    protected function testPlantGrowing(): void
+    public function testPlantGrowing(): void
     {
         $xSize = 3;
         $ySize = 3;
@@ -61,11 +60,9 @@ class ForestFieldTest extends AppTest
         $this->field->nextStep();
 
         $this->assertSame($this->field->getQuantityOfCells(PlantCell::class, true), $cellsQuantity);
-
-        echo "Test on plants growing successfully completed\n";
     }
 
-    protected function testPlantDying(): void
+    public function testPlantDying(): void
     {
         $xSize = 3;
         $ySize = 3;
@@ -86,11 +83,9 @@ class ForestFieldTest extends AppTest
         $this->field->nextStep();
 
         $this->assertSame($this->field->getQuantityOfCells(PlantCell::class, false), $cellsQuantity);
-
-        echo "Test on plants dying successfully completed\n";
     }
 
-    protected function testRabbitReproduction(): void
+    public function testRabbitReproduction(): void
     {
         $this->initFieldWithAlivePlants(2, 2);
 
@@ -99,11 +94,9 @@ class ForestFieldTest extends AppTest
 
         $this->field->nextStep();
         $this->assertSame($this->field->getQuantityOfCells(RabbitCell::class, true), 2);
-
-        echo "Test on rabbits reproduction successfully completed\n";
     }
 
-    protected function testBearHunting(): void
+    public function testBearHunting(): void
     {
         $this->initFieldWithAlivePlants(2, 1);
 
@@ -115,11 +108,9 @@ class ForestFieldTest extends AppTest
         $this->field->nextStep();
         $this->assertSame($this->field->getQuantityOfCells(RabbitCell::class, true), 0);
         $this->assertSame($this->field->getQuantityOfCells(BearCell::class, true), 1);
-
-        echo "Test on bears hunting successfully completed\n";
     }
 
-    protected function testBearSurviving(): void
+    public function testBearSurviving(): void
     {
         $this->initFieldWithAlivePlants(2, 1);
 
@@ -131,11 +122,9 @@ class ForestFieldTest extends AppTest
         $this->field->nextStep();
         $this->assertSame($this->field->getQuantityOfCells(WolfCell::class, true), 0);
         $this->assertSame($this->field->getQuantityOfCells(BearCell::class, true), 1);
-
-        echo "Test on bears surviving successfully completed\n";
     }
 
-    protected function testWolfHunting(): void
+    public function testWolfHunting(): void
     {
         $this->initFieldWithAlivePlants(2, 1);
 
@@ -147,11 +136,9 @@ class ForestFieldTest extends AppTest
         $this->field->nextStep();
         $this->assertSame($this->field->getQuantityOfCells(RabbitCell::class, true), 0);
         $this->assertSame($this->field->getQuantityOfCells(WolfCell::class, true), 1);
-
-        echo "Test on wolfs hunting successfully completed\n";
     }
 
-    protected function testStaticWaterBlock(): void
+    public function testStaticWaterBlock(): void
     {
         $xSize = 3;
         $ySize = 3;
@@ -169,11 +156,9 @@ class ForestFieldTest extends AppTest
         $this->field->nextStep();
 
         $this->assertTrue($this->field->getCell(1, 1) instanceof RabbitCell);
-
-        echo "Test of static water block successfully completed\n";
     }
 
-    protected function testBearStarving(): void
+    public function testBearStarving(): void
     {
         $this->initFieldWithAlivePlants(2, 2);
 
@@ -184,11 +169,9 @@ class ForestFieldTest extends AppTest
         $this->assertSame($this->field->getQuantityOfCells(BearCell::class, true), 1);
         $this->field->nextStep();
         $this->assertSame($this->field->getQuantityOfCells(BearCell::class, true), 0);
-
-        echo "Test on bears starving successfully completed\n";
     }
 
-    protected function testWolfStarving(): void
+    public function testWolfStarving(): void
     {
         $this->initFieldWithAlivePlants(2, 2);
 
@@ -198,11 +181,9 @@ class ForestFieldTest extends AppTest
         $this->assertSame($this->field->getQuantityOfCells(WolfCell::class, true), 1);
         $this->field->nextStep();
         $this->assertSame($this->field->getQuantityOfCells(WolfCell::class, true), 0);
-
-        echo "Test on wolfs starving successfully completed\n";
     }
 
-    protected function testRabbitStarving(): void
+    public function testRabbitStarving(): void
     {
         $xSize = 2;
         $ySize = 2;
@@ -221,31 +202,5 @@ class ForestFieldTest extends AppTest
         $this->assertSame($this->field->getQuantityOfCells(RabbitCell::class, true), 1);
         $this->field->nextStep();
         $this->assertSame($this->field->getQuantityOfCells(RabbitCell::class, true), 0);
-
-        echo "Test on rabbits starving successfully completed\n";
-    }
-
-    public function run(): void
-    {
-        $methodNames = [
-            'testPlantGrowing',
-            'testPlantDying',
-            'testRabbitReproduction',
-            'testBearHunting',
-            'testBearSurviving',
-            'testWolfHunting',
-            'testStaticWaterBlock',
-            'testBearStarving',
-            'testWolfStarving',
-            'testRabbitStarving',
-        ];
-
-        echo "Start forest field test...\n";
-
-        foreach ($methodNames as $methodName) {
-            $this->{$methodName}();
-        }
-
-        echo "\n";
     }
 }

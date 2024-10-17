@@ -1,0 +1,7 @@
+<phpunit colors="true">
+    <extensions>
+        <bootstrap class="RobinIngelbrecht\PHPUnitPrettyPrint\PhpUnitExtension">
+        </bootstrap>
+    </extensions>
+</phpunit>
+

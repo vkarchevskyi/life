@@ -7,9 +7,9 @@ namespace Test\ConwaysGame;
 use App\Models\ConwaysGame\Cells\DeadConwaysCell;
 use App\Models\ConwaysGame\Cells\LiveConwaysCell;
 use App\Models\ConwaysGame\Fields\ConwaysField;
-use Test\AppTest;
+use PHPUnit\Framework\TestCase;
 
-class ConwayFieldTest extends AppTest
+class ConwayFieldTest extends TestCase
 {
     protected const int FIELD_X_SIZE = 3;
 
@@ -17,7 +17,7 @@ class ConwayFieldTest extends AppTest
 
     protected ConwaysField $field;
 
-    protected function init(): void
+    protected function setUp(): void
     {
         $this->field = new ConwaysField(self::FIELD_X_SIZE, self::FIELD_Y_SIZE, false);
 
@@ -28,7 +28,7 @@ class ConwayFieldTest extends AppTest
         }
     }
 
-    protected function testDying(): void
+    public function testDyingFeature(): void
     {
         $this->field->setCell(1, 0, new LiveConwaysCell(1, 0));
         $this->field->setCell(0, 1, new LiveConwaysCell(0, 1));
@@ -39,11 +39,9 @@ class ConwayFieldTest extends AppTest
         $this->assertSame($this->field->getFieldInformation()['Alive'], 2);
         $this->field->nextStep();
         $this->assertSame($this->field->getFieldInformation()['Alive'], 0);
-
-        echo "Test on dying successfully completed\n";
     }
 
-    protected function testRepeat(): void
+    public function testRepeatPattern(): void
     {
         $this->field->setCell(1, 0, new LiveConwaysCell(1, 0));
         $this->field->setCell(1, 1, new LiveConwaysCell(1, 1));
@@ -76,11 +74,9 @@ class ConwayFieldTest extends AppTest
         $this->assertTrue($this->field->getCell(1, 1) instanceof LiveConwaysCell);
         $this->assertTrue($this->field->getCell(2, 1) instanceof LiveConwaysCell);
         $this->assertSame($this->field->getFieldInformation()['Alive'], 3);
-
-        echo "Test on repetition successfully completed\n";
     }
 
-    protected function testStable(): void
+    public function testStable(): void
     {
         $this->field->setCell(0, 0, new LiveConwaysCell(0, 0));
         $this->field->setCell(0, 1, new LiveConwaysCell(0, 1));
@@ -95,25 +91,5 @@ class ConwayFieldTest extends AppTest
         $this->assertTrue($this->field->getCell(1, 0) instanceof LiveConwaysCell);
         $this->assertTrue($this->field->getCell(1, 1) instanceof LiveConwaysCell);
         $this->assertSame($this->field->getFieldInformation()['Alive'], 4);
-
-        echo "Test on stable figure successfully completed\n";
-    }
-
-    public function run(): void
-    {
-        $methodNames = [
-            'testStable',
-            'testDying',
-            'testRepeat',
-        ];
-
-        echo "Start conways field test...\n";
-
-        foreach ($methodNames as $methodName) {
-            $this->init();
-            $this->{$methodName}();
-        }
-        
-        echo "\n";
     }
 }
