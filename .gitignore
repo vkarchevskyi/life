@@ -4,3 +4,4 @@
 .vscode/*
 vendor
 vendor/*
+.phpunit.result.cache

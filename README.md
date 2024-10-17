@@ -1,4 +1,7 @@
-# Conway's game of Life
+# Different life simulations
+
+### Conway's game of Life
+### Forest game
 
 ## How to launch?
 Minimal version of php is `>=8.3` for this project.
@@ -16,4 +19,4 @@ Minimal version of php is `>=8.3` for this project.
 - [x] Extend game by creating other fields and cells
 - [x] Improve validation
 - [ ] Add custom rules for Conway's game (random life, for example)
-- [ ] Write tests
+- [x] Write tests
