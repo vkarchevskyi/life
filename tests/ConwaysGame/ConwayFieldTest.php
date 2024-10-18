@@ -76,7 +76,7 @@ class ConwayFieldTest extends TestCase
         $this->assertSame($this->field->getFieldInformation()['Alive'], 3);
     }
 
-    public function testStable(): void
+    public function testStablePattern(): void
     {
         $this->field->setCell(0, 0, new LiveConwaysCell(0, 0));
         $this->field->setCell(0, 1, new LiveConwaysCell(0, 1));

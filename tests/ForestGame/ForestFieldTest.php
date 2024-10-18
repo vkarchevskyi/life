@@ -27,18 +27,6 @@ class ForestFieldTest extends TestCase
         }
     }
 
-    /**
-     * 1. Plants are growing
-     * 2. Plants are dying
-     * 3. 2x2 Rabbit eat plant, another rabbit created,
-     * 4. 2x2 bear eat rabbit
-     * 5. 2x2 bear eat wolf
-     * 6. 2x2 wolf eat rabbit
-     * 7. 3x3 rabbit around water
-     * 8. bear die without food
-     * 9. wolf die without food
-     * 10. rabbit die without food
-     */
     public function testPlantGrowing(): void
     {
         $xSize = 3;
